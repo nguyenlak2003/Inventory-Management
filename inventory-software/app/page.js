@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -6,6 +7,7 @@ export default function Home() {
       <div>
         Thạch ngu như chó
       </div>
+      <Link href="/dashboard/home/dashboard">view dashboard</Link>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
