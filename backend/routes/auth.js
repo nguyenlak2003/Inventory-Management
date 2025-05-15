@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { poolPromise } = require('../db');
+const sql = require('mssql');
 require('dotenv').config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -12,19 +13,22 @@ router.post('/login', async (req, res) => {
 
   try {
     const pool = await poolPromise;
+    
+    console.time('Query time');
     const result = await pool.request()
-      .input('username', username)
-      .query('SELECT * FROM Employee WHERE username = @username');
+      .input('username', sql.VarChar, username)
+      .query('SELECT username, password FROM Employee WHERE username = @username');
+    console.timeEnd('Query time');
 
     const user = result.recordset[0];
     
+    if (!user) {
+      return res.status(401).json({ message: 'Sai tên đăng nhập hoặc mật khẩu' });
+    }
+
     var isValidPassword = await bcrypt.compare(password, user.password);
 
-    console.log(user);
-    console.log(req.body);
-    console.log(isValidPassword);
-
-    if (!user || !isValidPassword) {
+    if (!isValidPassword) {
       return res.status(401).json({ message: 'Sai tên đăng nhập hoặc mật khẩu' });
     }
 
@@ -33,7 +37,7 @@ router.post('/login', async (req, res) => {
       JWT_SECRET,
       {expiresIn: '1h'}
     );
-
+    
     res.json({ message: 'Đăng nhập thành công', token, user: { username: user.username } });
 
   } catch (err) {

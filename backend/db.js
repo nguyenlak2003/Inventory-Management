@@ -13,10 +13,13 @@ const config = {
   }
 };
 
+console.time('SQL_Initial_Connection');
+
 const poolPromise = new sql.ConnectionPool(config)
   .connect()
   .then(pool => {
     console.log('✅ Kết nối SQL Server thành công');
+    console.timeEnd('SQL_Initial_Connection');
     return pool;
   })
   .catch(err => console.error('❌ Kết nối thất bại', err));
