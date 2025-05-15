@@ -4,10 +4,14 @@
     "\\app",
     "\\app\\(back-office)",
     "\\app\\(back-office)\\Overview",
+    "\\app\\(back-office)\\Overview\\Inventory",
+    "\\app\\(back-office)\\Overview\\Inventory\\Electronics",
+    "\\app\\(back-office)\\Overview\\Sales",
+    "\\app\\(back-office)\\Overview\\Sales\\Customers",
+    "\\component",
     "\\public",
-    "\\public\\components",
-    "\\public\\icon"
+    "\\public\\components"
   ],
-  "SelectedNode": "\\app\\page.js",
+  "SelectedNode": "\\app\\(back-office)\\Overview\\Sales\\Invoice",
   "PreviewInSolutionExplorer": false
 }
