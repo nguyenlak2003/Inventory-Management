@@ -4,14 +4,9 @@
     "\\app",
     "\\app\\(back-office)",
     "\\app\\(back-office)\\Overview",
-    "\\app\\(back-office)\\Overview\\Inventory",
-    "\\app\\(back-office)\\Overview\\Inventory\\Electronics",
-    "\\app\\(back-office)\\Overview\\Sales",
-    "\\app\\(back-office)\\Overview\\Sales\\Customers",
     "\\component",
-    "\\public",
-    "\\public\\components"
+    "\\component\\src",
+    "\\component\\src\\components"
   ],
-  "SelectedNode": "\\app\\(back-office)\\Overview\\Sales\\Invoice",
   "PreviewInSolutionExplorer": false
 }

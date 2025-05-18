@@ -1,9 +1,20 @@
-"use client";
+﻿"use client";
 import React, { useState } from "react";
 import NavItem from "./NavItem";
 import CollapsibleMenu from "./CollapsibleMenu";
-
+import { useRouter } from "next/navigation";
 function Sidebar({ selectedMenuItem, setSelectedMenuItem }) {
+    const router = useRouter();
+    const handleSalesSubItemClick = (item) => {
+        setSelectedMenuItem(item);
+        if (item === "Customers") {
+            router.push("/Overview/Sales/customers");
+        } else if (item === "Invoices") {
+            router.push("/Overview/Sales/invoices");
+        } else if (item === "Information") {
+            router.push("/Overview/Sales/information");
+        }
+    };
   const [menuOpen, setMenuOpen] = useState({
     inventory: false,
     sales: false,
@@ -43,29 +54,29 @@ function Sidebar({ selectedMenuItem, setSelectedMenuItem }) {
         onClick={() => setSelectedMenuItem("home")}
       />
 
-      <CollapsibleMenu
-        label="Inventory"
-        isOpen={menuOpen.inventory}
-        isSelected={selectedMenuItem === "inventory"}
-        onToggle={() => {
-          toggleMenu("inventory");
-          setSelectedMenuItem("inventory");
-        }}
-        onKeyDown={(event) => handleKeyDown(event, "inventory")}
-        menuItems={["Electronics", "Housewares", "Mics"]}
-      />
+          <CollapsibleMenu
+              label="Inventory"
+              isOpen={menuOpen.inventory}
+              isSelected={selectedMenuItem?.startsWith("inventory")}
+              onToggle={() => toggleMenu("inventory")}
+              onKeyDown={(event) => handleKeyDown(event, "inventory")}
+              menuItems={["Electronics", "Housewares", "Misc"]}
+              onSubItemClick={setSelectedMenuItem} // ✅ here
+          />
+
 
       <CollapsibleMenu
-        label="Sales"
-        isOpen={menuOpen.sales}
-        isSelected={selectedMenuItem === "sales"}
-        onToggle={() => {
-          toggleMenu("sales");
-          setSelectedMenuItem("sales");
-        }}
-        onKeyDown={(event) => handleKeyDown(event, "sales")}
-        menuItems={["Customers", "Invoices", "Information"]}
-      />
+      label="Sales"
+      isOpen={menuOpen.sales}
+      isSelected={selectedMenuItem === "sales"}
+      onToggle={() => {
+        toggleMenu("sales");
+        setSelectedMenuItem("sales");
+      }}
+      onKeyDown={(event) => handleKeyDown(event, "sales")}
+      menuItems={["Customers", "Invoices", "Information"]}
+      onSubItemClick={handleSalesSubItemClick} // <-- add this line
+    />
 
       <CollapsibleMenu
         label="Purchases"
