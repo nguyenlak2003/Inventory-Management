@@ -1,9 +1,10 @@
 "use client";
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
+import { useRouter } from "next/navigation";
 
-function page() {
+function Page() {
   const [inventoryItems, setInventoryItems] = useState(() => ({
     electronics: [],
     housewares: [],
@@ -232,12 +233,20 @@ function page() {
   }
 
   const [itemIndex, setItemIndex] = useState(() => null);
+  const chartRef = useRef(null);
 
-  useEffect(() => {
+
+  useEffect(() => {    
     // Initialize chart library
     if (document.getElementById("stockChart")) {
       const ctx = document.getElementById("stockChart").getContext("2d");
-      new Chart(ctx, {
+
+      // 👉 Hủy biểu đồ cũ nếu đã tồn tại
+      if (chartRef.current) {
+        chartRef.current.destroy();
+      }
+
+      chartRef.current = new Chart(ctx, {
         type: "pie",
         data: {
           labels: inventoryData.lowStock.map((item) => item.item),
@@ -255,6 +264,14 @@ function page() {
       });
     }
   }, [inventoryData.lowStock]);
+
+  // Xử lý phần đăng xuất
+  const router = useRouter();
+
+  const handleSignOut = () => {
+    localStorage.removeItem('token');
+    router.replace('/');
+  }
 
   return (
     <div className="flex min-h-screen bg-neutral-100">
@@ -490,6 +507,10 @@ function page() {
               <a
                 className="px-5 py-2.5 text-base no-underline rounded-md text-zinc-600"
                 href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSignOut();
+                }}
               >
                 Sign Out
               </a>
@@ -864,4 +885,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;
