@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Header from "./components/Header";
 import ImageCarousel from "./components/ImageCarousel";
 import Footer from "./components/Footer";
-import AuthModal from "./(back-office)/AuthModal";
+import AuthModal from "./login/AuthModal";
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
