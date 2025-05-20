@@ -25,7 +25,9 @@ router.post('/login', async (req, res) => {
     if (!user) {
       return res.status(401).json({ message: 'Sai tên đăng nhập hoặc mật khẩu' });
     }
+    const hashedPassword = await bcrypt.hash(password, 10);
 
+      console.log('user', user, hashedPassword);
     var isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {

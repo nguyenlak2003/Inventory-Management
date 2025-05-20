@@ -1,9 +1,9 @@
 ﻿"use client";
 
 import React, { useState, useEffect } from "react";
-import Header from "./components/Header";
-import ImageCarousel from "./components/ImageCarousel";
-import Footer from "./components/Footer";
+import Header from "./back-office-components/Header";
+import ImageCarousel from "./back-office-components/ImageCarousel";
+import Footer from "./back-office-components/Footer";
 import AuthModal from "./login/AuthModal";
 import { useRouter } from 'next/navigation';
 
