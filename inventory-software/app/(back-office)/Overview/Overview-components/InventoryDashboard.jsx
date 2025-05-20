@@ -10,11 +10,12 @@ function InventoryDashboard() {
     housewares: [],
     misc: [],
   }));
-
-  const [tableData, setTableData] = useState(() => ({
+   const [salesItems, setSalesItems] = useState(() => ({
     customers: [],
     invoices: [],
     information: [],
+   }))
+  const [purchaseItems, setPurChaseItems] = useState(() => ({
     suppliers: [],
     employees: [],
     bills: [],
