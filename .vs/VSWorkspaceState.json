@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\inventory-software",
+    "\\inventory-software\\app",
+    "\\inventory-software\\app\\(back-office)",
+    "\\inventory-software\\app\\(back-office)\\Overview",
+    "\\inventory-software\\app\\(back-office)\\Overview\\Inventory",
+    "\\inventory-software\\app\\login",
+    "\\inventory-software\\components",
+    "\\inventory-software\\components\\accessible-navbar"
+  ],
+  "PreviewInSolutionExplorer": false
+}
