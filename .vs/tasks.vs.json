@@ -1,0 +1,10 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "task-plans",
+      "appliesTo": "inventory-software/app/(back-office)/plans/",
+      "type": "launch"
+    }
+  ]
+}
