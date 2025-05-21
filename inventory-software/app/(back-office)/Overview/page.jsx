@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from "react";
-import SidebarMenu from "./SidebarMenu"; // Adjust the path if needed
+import SidebarMenu from "./SidebarMenu/SidebarMenu"; // Adjust the path if needed
 import Link from 'next/link';
 export default function OverviewPage() {
     return (
