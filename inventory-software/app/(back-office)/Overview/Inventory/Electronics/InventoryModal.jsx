@@ -215,8 +215,8 @@ function ItemDetails({ selectedItem }) {
        <span>{selectedItem?.buyPrice}</span>
      </div>
      <div>
-       <strong>Providers:</strong>
-       <span> {selectedItem?.providers.join(", ")}</span>
+       <strong>Providers: </strong>
+       <span>{selectedItem?.providers}</span>
      </div>
      <div>
        <strong>Billing Number:</strong>

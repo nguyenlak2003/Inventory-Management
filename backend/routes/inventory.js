@@ -12,25 +12,41 @@ router.get('/:categoryName', async (req, res) => {
     try {
         const pool = await poolPromise;
         const result = await pool.request()
-            .input('TenLoaiSP', sql.NVarChar, categoryName)
+            .input('CategoryNameParam', sql.NVarChar, categoryName)
             .query(`
                 SELECT 
-                    sp.MaSP, 
-                    sp.TenSP, 
-                    sp.MoTa, 
-                    sp.DonViTinh, 
-                    sp.GiaNhap, 
-                    sp.GiaXuat
-                FROM SanPham sp
-                JOIN LoaiSanPham lsp ON sp.MaLoaiSP = lsp.MaLoaiSP
-                WHERE lsp.TenLoaiSP = @TenLoaiSP
+                    Products.ProductID,
+                    ProductName,
+                    Description,
+                    UnitOfMeasure,
+                    ImportPrice,
+                    SellingPrice,
+                    CategoryName,
+                    SupplierName,
+                    COALESCE(SUM(Quantity), 0) AS Quantity
+                FROM Products
+                JOIN ProductCategories ON Products.CategoryID  = ProductCategories.CategoryID
+                JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID
+                LEFT JOIN Inventory ON Products.ProductID = Inventory.ProductID
+                WHERE ProductCategories.CategoryName  = @CategoryNameParam
+                GROUP BY
+                    Products.ProductID, 
+                    ProductName, 
+                    Description, 
+                    UnitOfMeasure, 
+                    ImportPrice, 
+                    SellingPrice,
+                    CategoryName,
+                    SupplierName
             `);
-
+            console.log(result.recordset);
             res.json(result.recordset);
     } catch (err) {
         console.error(`Lỗi khi truy vấn dữ liệu cho category '${categoryName}':`, err.message);
         res.status(500).json({ message: `Lỗi server khi lấy dữ liệu cho category ${categoryName}.` });
     }
 })
+
+
 
 module.exports = router;

@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import InventoryTable from "./InventoryTable";
 import InventoryModal from "./InventoryModal";
-import SidebarMenu from "../../SidebarMenu/SidebarMenu";
+import { useRouter } from 'next/navigation';
+
 function InventoryManagement() {
+  const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [lastFocusedElement, setLastFocusedElement] = useState(null);
@@ -13,30 +15,88 @@ function InventoryManagement() {
   const closeButtonRef = useRef(null);
   const modalRef = useRef(null);
 
-  const [inventory, setInventory] = useState([
-    {
-      id: 1,
-      code: "ITM001",
-      name: "Office Chair",
-      quantity: 50,
-      sellPrice: 299.99,
-      buyPrice: 150.0,
-      providers: ["Office Solutions Inc", "Furniture Plus"],
-      billingNumber: "BN-2023-001",
-      purchaseDate: "2023-12-01",
-    },
-    {
-      id: 2,
-      code: "ITM002",
-      name: "Desk Lamp",
-      quantity: 75,
-      sellPrice: 45.99,
-      buyPrice: 22.5,
-      providers: ["Lightning Co", "Home Essentials"],
-      billingNumber: "BN-2023-002",
-      purchaseDate: "2023-12-05",
-    },
-  ]);
+  // State to store the inventory items from the database
+  const [fetchedInventory, setFetchedInventory] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const category = "Electronics";
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+  useEffect(() => {
+    if(!apiUrl) {
+      console.error("API is not defined");
+      setError("Không thấy API");
+      setIsLoading(false);
+      return;
+    }
+
+    const fetchInventoryData = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      const token = localStorage.getItem("token");
+
+      if(!token) {
+        setError("Bạn chưa đăng nhập. Vui lòng đăng nhập để xem dữ liệu.");
+        setIsLoading(false);
+        router.replace("/login");
+        return;
+      }
+
+      try {
+        const response = await fetch(`${apiUrl}/api/inventory/${category}`, {
+          method: "GET",
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          }
+        });
+
+        if(!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || `Lỗi HTTP: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const mappedData = data.map(item => {
+
+          let derivedId = item.ProductID;
+          if (typeof item.ProductID === 'string' && item.ProductID.length >= 3) {
+            derivedId = item.ProductID.slice(-3);
+          } else if (typeof item.ProductID === 'string') {
+            derivedId = item.ProductID; // Giữ nguyên nếu ngắn hơn 3 ký tự
+          } else {
+            derivedId = String(Date.now()); // Fallback nếu ProductID không phải string
+          }
+
+          return {
+            id: derivedId,
+            code: item.ProductID,
+            name: item.ProductName,
+            quantity: item.Quantity,
+            sellPrice: item.SellingPrice,
+            buyPrice: item.ImportPrice,
+            description: item.Description,
+            unit: item.UnitOfMeasure,
+            providers: item.SupplierName,
+          }
+        });
+
+        setFetchedInventory(mappedData);
+      } catch (err) {
+        console.error(`Lỗi khi fetch inventory cho category '${category}':`, err);
+        setError(err.message || "Không thể tải dữ liệu inventory.");
+        setFetchedInventory([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchInventoryData();
+  }, [category, apiUrl, router]);;
 
   function openModal(item) {
     setLastFocusedElement(document.activeElement);
@@ -123,7 +183,7 @@ function InventoryManagement() {
       </header>
 
       <InventoryTable
-        inventory={inventory}
+        inventory={fetchedInventory}
         onOpenDetails={openModal}
         onEditItem={editItem}
         onRemoveItem={removeItem}
