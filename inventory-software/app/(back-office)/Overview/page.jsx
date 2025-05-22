@@ -7,9 +7,9 @@ export default function OverviewPage() {
     return (
         <div style={{ display: 'flex' }}>
             <SidebarMenu />
-            <InventoryProTabs/>
             <main style={{ flex: 1, padding: '2rem' }}>
-                
+                <InventoryProTabs />
+
             </main>
         </div>
     );

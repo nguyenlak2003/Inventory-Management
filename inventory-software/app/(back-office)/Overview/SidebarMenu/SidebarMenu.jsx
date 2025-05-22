@@ -42,7 +42,12 @@ export default function SidebarMenu() {
         >
             <ul>
                 <li>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                        <path d="M120-120q-33 0-56.5-23.5T40-200v-480q0-33 23.5-56.5T120-760h480q33 0 56.5 23.5T680-680v240h80q17 0 32 6.5t26 18.5l96 96q11 11 17.5 26t6.5 32v120q0 33-23.5 56.5T840-120q-33 0-56.5-23.5T760-200v-40H680v40q0 33-23.5 56.5T600-120H120Zm0-80h480v-480H120v480Zm560-80h80v-120l-80-80v200ZM200-320h240q17 0 28.5-11.5T480-360q0-17-11.5-28.5T440-400H200q-17 0-28.5 11.5T160-360q0 17 11.5 28.5T200-320Zm0-120h240q17 0 28.5-11.5T480-480q0-17-11.5-28.5T440-520H200q-17 0-28.5 11.5T160-480q0 17 11.5 28.5T200-440ZM120-680v480-480Z" />
+                    </svg>
                     <span className="logo">InventoryPro</span>
+                                       
+                   
                     <button
                         onClick={toggleSidebar}
                         id="toggle-btn"

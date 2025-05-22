@@ -5,10 +5,12 @@
     "\\inventory-software\\app",
     "\\inventory-software\\app\\(back-office)",
     "\\inventory-software\\app\\(back-office)\\Overview",
-    "\\inventory-software\\app\\(back-office)\\Overview\\Overview-components",
-    "\\inventory-software\\app\\login",
+    "\\inventory-software\\app\\(back-office)\\Overview\\Inventory",
+    "\\inventory-software\\app\\(back-office)\\Overview\\Inventory\\Electronics",
+    "\\inventory-software\\app\\(back-office)\\Overview\\Inventory\\Housewares",
+    "\\inventory-software\\app\\(back-office)\\Overview\\SidebarMenu",
     "\\inventory-software\\components"
   ],
-  "SelectedNode": "\\inventory-software\\app\\(back-office)\\Overview\\page.jsx",
+  "SelectedNode": "\\inventory-software\\app\\(back-office)\\Overview\\Inventory\\Electronics\\ActionButton.jsx",
   "PreviewInSolutionExplorer": false
 }
