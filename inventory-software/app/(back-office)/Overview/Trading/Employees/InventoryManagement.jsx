@@ -112,7 +112,7 @@ function InventoryManagement() {
 
       <header className="flex justify-between items-center mb-8">
         <h1 className="pb-2.5 text-3xl text-red-700 border-b-2 border-solid border-b-red-700">
-          MISC
+          EMPLOYEES
         </h1>
         <button
           className="px-6 py-3 text-base bg-red-700 rounded cursor-pointer border-[none] text-[white]"

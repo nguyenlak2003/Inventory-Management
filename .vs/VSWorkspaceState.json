@@ -5,12 +5,10 @@
     "\\inventory-software\\app",
     "\\inventory-software\\app\\(back-office)",
     "\\inventory-software\\app\\(back-office)\\Overview",
-    "\\inventory-software\\app\\(back-office)\\Overview\\Sales\\Inbound",
-    "\\inventory-software\\app\\(back-office)\\Overview\\Sales\\Outbound",
-    "\\inventory-software\\app\\(back-office)\\Overview\\Sales\\Provider",
+    "\\inventory-software\\app\\(back-office)\\Overview\\Overview-components",
     "\\inventory-software\\app\\login",
     "\\inventory-software\\components"
   ],
-  "SelectedNode": "\\inventory-software\\app\\(back-office)\\layout.js",
+  "SelectedNode": "\\inventory-software\\app\\(back-office)\\Overview\\page.jsx",
   "PreviewInSolutionExplorer": false
 }

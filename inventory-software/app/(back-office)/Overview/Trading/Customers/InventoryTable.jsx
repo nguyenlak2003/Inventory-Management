@@ -21,13 +21,13 @@ return (
             scope="col"
             className="px-6 py-5 text-base font-semibold text-left"
           >
-            Item Code
+            Customer Code
           </th>
           <th scope="col" className="p-4 text-left">
             Name
           </th>
           <th scope="col" className="p-4 text-left">
-            Quantity
+            Phone number
           </th>
           <th scope="col" className="px-3 py-4 text-center">
             Manage
