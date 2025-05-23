@@ -17,7 +17,7 @@ router.post('/login', async (req, res) => {
     console.time('Query time');
     const result = await pool.request()
       .input('username', sql.VarChar, username)
-      .query('SELECT username, password FROM Employee WHERE username = @username');
+      .query('SELECT username, password, Role FROM Employee WHERE username = @username');
     console.timeEnd('Query time');
 
     const user = result.recordset[0];
@@ -35,7 +35,7 @@ router.post('/login', async (req, res) => {
     }
 
     const token = jwt.sign(
-      {username: user.username},
+      {username: user.username, role: user.Role},
       JWT_SECRET,
       {expiresIn: '1h'}
     );

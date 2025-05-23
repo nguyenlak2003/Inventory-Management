@@ -77,7 +77,7 @@ return (
         <ActionButton variant="secondary" onClick={() => onEditItem(item)}>
           Edit
         </ActionButton>
-        <ActionButton variant="danger" onClick={() => onRemoveItem(item.id)}>
+        <ActionButton variant="danger" onClick={() => onRemoveItem(item.code)}>
           Remove
         </ActionButton>
       </div>

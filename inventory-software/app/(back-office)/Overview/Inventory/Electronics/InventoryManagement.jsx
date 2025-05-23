@@ -123,14 +123,43 @@ function InventoryManagement() {
     }, 100);
   }
 
-  function editItem(item) {
+  async function editItem(item) {
     setIsEditing(true);
     openModal(item);
   }
 
-  function removeItem(id) {
+  async function removeItem(productCode) {
     if (confirm("Are you sure you want to remove this item?")) {
-      setInventory(inventory.filter((item) => item.id !== id));
+      const token = localStorage.getItem('token');
+
+      if(!token) {
+        setError("Bạn chưa đăng nhập hoặc lỗi cấu hình");
+        return;
+      }
+
+      try {
+        const response = await fetch(`${apiUrl}/api/inventory/items/${productCode}/deActive`, {
+          method: "PUT",
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': "application/json",
+          }
+        });
+
+        console.log(response);
+
+        if(!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || `Lỗi HTTP: ${response.status}`);
+        }
+
+        setFetchedInventory(prevInventory =>
+        prevInventory.filter((item) => item.code !== productCode));
+
+        console.log(`Sản phẩm với ID ${productCode} đã được đánh dấu là không hoạt động trên server và ẩn khỏi giao diện.`);
+      } catch (err) {
+        
+      }
     }
   }
 
