@@ -129,6 +129,7 @@ function InventoryManagement() {
   }
 
   async function removeItem(productCode) {
+
     if (confirm("Are you sure you want to remove this item?")) {
       const token = localStorage.getItem('token');
 
@@ -216,7 +217,8 @@ function InventoryManagement() {
         onOpenDetails={openModal}
         onEditItem={editItem}
         onRemoveItem={removeItem}
-        isModalOpen={isModalOpen}
+              isModalOpen={isModalOpen}
+        onUpdateItem={updateItem}
       />
 
       {isModalOpen && (

@@ -1,18 +1,13 @@
-
-
 "use client"
 import React, { useState } from "react";
-
-import Link from 'next/link';
-import InventoryManagement from "./InventoryManagement";
-import SidebarMenu from "../../SidebarMenu/SidebarMenu";
-
-export default function InventoryManagemnet() {
+import SidebarMenu from "../SidebarMenu/SidebarMenu"; // Adjust the path if needed
+import DashboardPage from "./DashboardPage";
+export default function Dashboard() {
     return (
         <div style={{ display: 'flex' }}>
             <SidebarMenu />
             <main style={{ flex: 1, padding: '2rem' }}>
-            <InventoryManagement/>
+            <DashboardPage/>    
             </main>
         </div>
     );

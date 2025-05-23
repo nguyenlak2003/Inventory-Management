@@ -42,7 +42,12 @@ export default function SidebarMenu() {
         >
             <ul>
                 <li>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                        <path d="M120-120q-33 0-56.5-23.5T40-200v-480q0-33 23.5-56.5T120-760h480q33 0 56.5 23.5T680-680v240h80q17 0 32 6.5t26 18.5l96 96q11 11 17.5 26t6.5 32v120q0 33-23.5 56.5T840-120q-33 0-56.5-23.5T760-200v-40H680v40q0 33-23.5 56.5T600-120H120Zm0-80h480v-480H120v480Zm560-80h80v-120l-80-80v200ZM200-320h240q17 0 28.5-11.5T480-360q0-17-11.5-28.5T440-400H200q-17 0-28.5 11.5T160-360q0 17 11.5 28.5T200-320Zm0-120h240q17 0 28.5-11.5T480-480q0-17-11.5-28.5T440-520H200q-17 0-28.5 11.5T160-480q0 17 11.5 28.5T200-440ZM120-680v480-480Z" />
+                    </svg>
                     <span className="logo">InventoryPro</span>
+                                       
+                   
                     <button
                         onClick={toggleSidebar}
                         id="toggle-btn"
@@ -66,13 +71,13 @@ export default function SidebarMenu() {
                     </Link>
                 </li>
                 <li>
-                    <a href="dashboard.html">
+                    <Link href="/Overview/Dashboard">
                         {/* SVG icon */}
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
                             <path d="M520-640v-160q0-17 11.5-28.5T560-840h240q17 0 28.5 11.5T840-800v160q0 17-11.5 28.5T800-600H560q-17 0-28.5-11.5T520-640ZM120-480v-320q0-17 11.5-28.5T160-840h240q17 0 28.5 11.5T440-800v320q0 17-11.5 28.5T400-440H160q-17 0-28.5-11.5T120-480Zm400 320v-320q0-17 11.5-28.5T560-520h240q17 0 28.5 11.5T840-480v320q0 17-11.5 28.5T800-120H560q-17 0-28.5-11.5T520-160Zm-400 0v-160q0-17 11.5-28.5T160-360h240q17 0 28.5 11.5T440-320v160q0 17-11.5 28.5T400-120H160q-17 0-28.5-11.5T120-160Zm80-360h160v-240H200v240Zm400 320h160v-240H600v240Zm0-480h160v-80H600v80ZM200-200h160v-80H200v80Zm160-320Zm240-160Zm0 240ZM360-280Z" />
                         </svg>
                         <span>Dashboard</span>
-                    </a>
+                    </Link>
                 </li>
                 {/* Submenus */}
                 {subMenus.map((menu, idx) => (
