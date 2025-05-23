@@ -149,10 +149,22 @@ function InventoryManagement() {
 
         console.log(response);
 
-        if(!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || `Lỗi HTTP: ${response.status}`);
+      if (!response.ok) {
+        let errorData = { message: `Lỗi HTTP: ${response.status}. Không thể đọc chi tiết lỗi từ server.` };
+        try {
+            errorData = await response.json();
+        } catch (e) {
+            console.error("Không thể parse JSON lỗi từ server:", e);
         }
+
+        if (response.status === 403) {
+          console.log("Lỗi 403 từ server:", errorData.message);
+          setError("Chỉ admin mới có quyền thực hiện thao tác này."); 
+        } else {
+          setError(errorData.message || `Lỗi HTTP: ${response.status}`);
+        }
+        return; 
+      }
 
         setFetchedInventory(prevInventory =>
         prevInventory.filter((item) => item.code !== productCode));
@@ -212,13 +224,19 @@ function InventoryManagement() {
         </button>
       </header>
 
+      {error && (
+        <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
+          <span className="font-medium">Lỗi!</span> {error}
+        </div>
+      )}
+
       <InventoryTable
         inventory={fetchedInventory}
         onOpenDetails={openModal}
         onEditItem={editItem}
         onRemoveItem={removeItem}
               isModalOpen={isModalOpen}
-        onUpdateItem={updateItem}
+        //onUpdateItem={updateItem}
       />
 
       {isModalOpen && (

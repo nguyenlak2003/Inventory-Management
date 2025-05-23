@@ -4,7 +4,7 @@ const isAdmin = (req, res, next) => {
   if (req.user && req.user.role === 'admin') { 
     next(); 
   } else {
-    console.warn(`User ${req.user?.username} with role ${req.user?.role} attempted an admin action.`);
+    console.warn(`User ${req.user?.username} with role ${req.user?.role} attempted an admin action on ${req.originalUrl}`);
     res.status(403).json({ message: 'Forbidden: Yêu cầu quyền Admin.' }); 
   }
 };
