@@ -13,13 +13,13 @@ function InventoryManagement() {
   const [isEditing, setIsEditing] = useState(false); // true: EditForm, false: ItemDetails hoặc AddForm
   const [isAddingNew, setIsAddingNew] = useState(false); // State mới để phân biệt Add New
 
-  const [bodyOverflowStyle, setBodyOverflowStyle] = useState("auto");
   const closeButtonRef = useRef(null);
-  const modalRef = useRef(null);
 
   const [fetchedInventory, setFetchedInventory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const [userRole, setUserRole] = useState(null);
 
   const category = "Electronics";
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -61,7 +61,7 @@ function InventoryManagement() {
 
         const data = await response.json();
 
-        const mappedData = data.map(item => ({
+        const mappedData = data.inventory.map(item => ({
           id: (typeof item.ProductID === 'string' && item.ProductID.length >= 3) ? item.ProductID.slice(-3) : item.ProductID,
           code: item.ProductID,
           categoryID: item.CategoryID,
@@ -78,6 +78,7 @@ function InventoryManagement() {
         }));
 
         setFetchedInventory(mappedData);
+        setUserRole(data.userRole);
 
       } catch (err) {
         console.error(`Lỗi khi fetch inventory cho category '${category}':`, err);
@@ -97,7 +98,6 @@ function InventoryManagement() {
     setIsEditing(false);   
     setIsAddingNew(false);
     setIsModalOpen(true);
-    setBodyOverflowStyle("hidden");
     setTimeout(() => {
       if (closeButtonRef.current) {
         closeButtonRef.current.focus();
@@ -111,7 +111,6 @@ function InventoryManagement() {
     setIsEditing(true);    // QUAN TRỌNG: Để hiển thị EditForm
     setIsAddingNew(false);
     setIsModalOpen(true);
-    setBodyOverflowStyle("hidden");
     setTimeout(() => {
       if (closeButtonRef.current) {
         closeButtonRef.current.focus();
@@ -159,7 +158,6 @@ function InventoryManagement() {
         setIsEditing(true);
         setIsAddingNew(true);
         setIsModalOpen(true);
-        setBodyOverflowStyle("hidden");
 
     } catch (error) {
         console.error("Lỗi khi mở form thêm mới:", error);
@@ -311,7 +309,6 @@ function InventoryManagement() {
     setSelectedItem(null);
     setIsEditing(false);
     setIsAddingNew(false);
-    setBodyOverflowStyle("auto");
     if (lastFocusedElement) {
       lastFocusedElement.focus();
     }
@@ -330,8 +327,10 @@ function InventoryManagement() {
             {category.toUpperCase()} 
           </h1>
           <button
-            className="px-6 py-3 text-base bg-red-700 rounded cursor-pointer border-[none] text-[white]"
-            onClick={openAddNewModal} // Gọi hàm mở modal Add New
+            className="px-6 py-3 text-base bg-red-700 rounded cursor-pointer border-[none] text-[white] transition-all duration-200 ease-in-out hover:bg-red-800 hover:scale-105 hover:shadow-lg disabled:bg-gray-400 disabled:cursor-not-allowed disabled:scale-100 disabled:shadow-none"
+            onClick={openAddNewModal}
+            disabled={userRole !== 'admin'} // Vô hiệu hóa nút nếu vai trò không phải 'admin'
+            title={userRole !== 'admin' ? "Chỉ tài khoản Admin mới có thể thêm sản phẩm" : "Thêm sản phẩm mới"}
           >
             Add New Item
           </button>

@@ -1,5 +1,6 @@
 "use client";  
 import React from "react";  
+import { useRouter } from 'next/navigation'
 import AccountDetailsCard from "./AccountDetailsCard";  
 import PasswordChangeCard from "./PasswordChangeCard";  
 import UsernameChangeCard from "./UsernameChangeCard";  
@@ -7,9 +8,12 @@ import Button from "./Button";
 import SidebarMenu from "../SidebarMenu/SidebarMenu"; // Adjust the path if needed  
 
 function AccountManagement() {  
+  const router = useRouter();
+
  const handleLogout = () => {  
-   // Simulate logout  
-   console.log("Logging out...");  
+    localStorage.removeItem('token');
+    //alert("Bạn đã đăng xuất thành công.");
+    router.replace('/');
  };  
 
  return (  

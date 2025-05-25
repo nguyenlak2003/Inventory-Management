@@ -1,31 +1,15 @@
-import React, { useState } from "react";
+import React from "react"; // Bỏ useState nếu không dùng
 import ActionButton from "./ActionButton";
-import EditItemModal from "./EditItemModal";
 
 function InventoryTable({
     inventory,
-    onOpenDetails,
+    onOpenDetails, 
+    onEditItem,   
     onRemoveItem,
-    isModalOpen,
-    onUpdateItem, // new prop for updating
 }) {
-    const [editModalOpen, setEditModalOpen] = useState(false);
-    const [editItem, setEditItem] = useState(null);
-
-    function handleEdit(item) {
-        setEditItem(item);
-        setEditModalOpen(true);
-    }
-
-    function handleSave(updatedItem) {
-        onUpdateItem(updatedItem);
-        setEditModalOpen(false);
-        setEditItem(null);
-    }
-
-    function handleClose() {
-        setEditModalOpen(false);
-        setEditItem(null);
+    
+    if (!inventory || inventory.length === 0) {
+        return <div className="p-10 text-base text-center text-zinc-600">Không có sản phẩm nào để hiển thị.</div>;
     }
 
     return (
@@ -37,39 +21,28 @@ function InventoryTable({
             >
                 <thead>
                     <tr className="bg-red-700 text-[white]">
-                        <th scope="col" className="px-6 py-5 text-base font-semibold text-left">
-                            Item Code
-                        </th>
-                        <th scope="col" className="p-4 text-left">
-                            Name
-                        </th>
-                        <th scope="col" className="p-4 text-left">
-                            Quantity
-                        </th>
-                        <th scope="col" className="px-3 py-4 text-center">
-                            Manage
-                        </th>
+                        <th scope="col" className="px-6 py-5 text-base font-semibold text-left">Item Code</th>
+                        <th scope="col" className="p-4 text-left">Name</th>
+                        <th scope="col" className="p-4 text-left">Quantity</th>
+                        <th scope="col" className="p-4 text-left">Unit</th>
+                        <th scope="col" className="p-4 text-left">Category</th>
+                        <th scope="col" className="px-3 py-4 text-center">Manage</th>
                     </tr>
                 </thead>
                 <tbody>
                     {inventory?.map((item) => (
                         <TableRow
-                            key={item.id}
+                            key={item.code} // Dùng ProductID (item.code) làm key
                             item={item}
-                            onOpenDetails={onOpenDetails}
-                            onEditItem={handleEdit}
+                            onOpenDetails={onOpenDetails} // Truyền prop này xuống
+                            onEditItem={onEditItem}     // Truyền prop này xuống
                             onRemoveItem={onRemoveItem}
-                            isModalOpen={isModalOpen}
+                            // isModalOpen={isModalOpen} // Không cần thiết cho TableRow nếu modal quản lý ở cấp cao hơn
                         />
                     ))}
                 </tbody>
             </table>
-            <EditItemModal
-                isOpen={editModalOpen}
-                item={editItem}
-                onSave={handleSave}
-                onClose={handleClose}
-            />
+            {/* EditItemModal sẽ được render bởi InventoryManagement */}
         </div>
     );
 }
@@ -77,36 +50,36 @@ function InventoryTable({
 function TableRow({
     item,
     onOpenDetails,
-    onEditItem,
+    onEditItem, // Nhận hàm từ props
     onRemoveItem,
-    isModalOpen,
+    // isModalOpen, // Không cần
 }) {
-    return (
-        <tr className="border-b border-solid border-b-zinc-100 text-black">
-            <td className="px-6 py-5 text-base border border-gray-300">{item.code}</td>
-            <td className="p-4 border border-gray-300">{item.name}</td>
-            <td className="p-4 border border-gray-300">{item.quantity}</td>
-            <td className="px-3 py-5 text-center border border-gray-300">
-                <div className="flex gap-2.5 justify-center">
-                    <ActionButton
-                        variant="primary"
-                        onClick={() => onOpenDetails(item)}
-                        aria-controls="details-modal"
-                        aria-expanded={isModalOpen}
-                        className="min-w-[100px]"
-                    >
-                        Details
-                    </ActionButton>
-                    <ActionButton variant="secondary" onClick={() => onEditItem(item)}>
-                        Edit
-                    </ActionButton>
-                    <ActionButton variant="danger" onClick={() => onRemoveItem(item.id)}>
-                        Remove
-                    </ActionButton>
-                </div>
-            </td>
-        </tr>
-    );
+return (
+  <tr className="border-b border-solid border-b-zinc-100 text-black">
+    <td className="px-6 py-5 text-base border border-gray-300">{item.code}</td>
+    <td className="p-4 border border-gray-300">{item.name}</td>
+    <td className="p-4 border border-gray-300">{item.quantity}</td>
+    <td className="p-4 border border-gray-300">{item.unit}</td>
+    <td className="p-4 border border-gray-300">{item.category}</td>
+    <td className="px-3 py-5 text-center border border-gray-300">
+      <div className="flex gap-2.5 justify-center">
+        <ActionButton
+          variant="primary"
+          onClick={() => onOpenDetails(item)} // Gọi onOpenDetails
+          className="min-w-[100px]"
+        >
+          Details
+        </ActionButton>
+        <ActionButton variant="secondary" onClick={() => onEditItem(item)}> {/* Gọi onEditItem */}
+          Edit
+        </ActionButton>
+        <ActionButton variant="danger" onClick={() => onRemoveItem(item.code)}>
+          Remove
+        </ActionButton>
+      </div>
+    </td>
+  </tr>
+);
 }
 
 export default InventoryTable;

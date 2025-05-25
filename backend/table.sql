@@ -92,6 +92,7 @@ GO
 
 --9. Chi Tiết Phiếu Nhập Kho (Inbound Order Details) - Auto-generated Primary Key (Identity)
 CREATE TABLE InboundOrderDetails (
+    
     InboundDetailID INT PRIMARY KEY IDENTITY(1,1),
     InboundOrderID VARCHAR(50),
     ProductID VARCHAR(50),
@@ -129,4 +130,48 @@ CREATE TABLE Inventory (
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
     FOREIGN KEY (WarehouseID) REFERENCES Warehouses(WarehouseID)
 );
+GO
+
+-- Chèn dữ liệu cho bảng Loại Sản Phẩm (ProductCategories)
+INSERT INTO ProductCategories (CategoryID, CategoryName) VALUES
+('ELE', N'Electronics'),
+('HOU', N'Housewares'),
+('MSC', N'Miscellaneous');
+GO
+
+-- Chèn dữ liệu cho bảng Nhà Cung Cấp (Suppliers)
+INSERT INTO Suppliers (SupplierID, SupplierName, Addr, PhoneNumber, Email) VALUES
+('SUP001', N'Công Ty TNHH ABC', N'123 Đường Giải Phóng, Hà Nội', '0901234567', 'contact@abc.com'),
+('SUP002', N'Doanh Nghiệp Tư Nhân XYZ', N'456 Đường Lê Lợi, TP. Hồ Chí Minh', '0987654321', 'info@xyz.vn'),
+('SUP003', N'Tập Đoàn Toàn Cầu JSC', N'789 Đường Nguyễn Huệ, Đà Nẵng', '0912345678', 'support@toancau.com');
+GO
+
+-- Chèn dữ liệu cho bảng Kho (Warehouses)
+-- Dữ liệu kho không được cung cấp đầy đủ trong ảnh, tạm thời tạo một kho để đảm bảo tính toàn vẹn dữ liệu
+INSERT INTO Warehouses (WarehouseID, WarehouseName, Addr) VALUES
+('WH001', N'Kho Tổng hợp 1', N'Địa chỉ kho mặc định');
+GO
+
+-- Chèn dữ liệu cho bảng Sản Phẩm (Products)
+INSERT INTO Products (ProductID, ProductName, Description, UnitOfMeasure, ImportPrice, SellingPrice, SupplierID, CategoryID, IsActive) VALUES
+('ELE001', N'nam12', NULL, NULL, 3.00, 2.00, 'SUP001', 'ELE', 1),
+('ELE002', N'duy', N'Điện thoại thông minh với camera 108MP', N'Cái', 9500000.00, 12500000.00, 'SUP001', 'ELE', 1),
+('ELE003', N'Tai nghe Bluetooth Z', N'Tai nghe không dây, chống ồn chủ động', N'Cái', 1200000.00, 1800000.00, 'SUP002', 'ELE', 1),
+('ELE004', N'nam', N'test', N'hộp', 13.00, 12.00, NULL, 'ELE', 1),
+('HOU001', N'Bộ Nồi Inox Cao Cấp abc', N'Bộ 5 nồi inox 304, nắp kính chịu lực', N'Bộ', 2500000.00, 3500000.00, 'SUP002', 'HOU', 1),
+('HOU002', N'Máy Xay Sinh Tố Đa Năng', N'Xay hoa quả, thịt, hạt khô', N'Cái', 800000.00, 1200000.00, 'SUP002', 'HOU', 1),
+('MSC001', N'Sách Kỹ Năng Mềm', N'Tuyển tập các bài học phát triển bản thân', N'Quyển', 150000.00, 220000.00, NULL, 'MSC', 1),
+('MSC002', N'Bút Bi Xóa Được', N'Bút bi mực xanh, có thể xóa được', N'Cây', 20000.00, 35000.00, NULL, 'MSC', 1);
+GO
+
+-- Chèn dữ liệu cho bảng Hàng trong kho (Inventory)
+INSERT INTO Inventory (ProductID, WarehouseID, Quantity) VALUES
+('ELE001', 'WH001', 0),
+('ELE002', 'WH001', 123),
+('ELE003', 'WH001', 300),
+('ELE004', 'WH001', 0),
+('HOU001', 'WH001', 75),
+('HOU002', 'WH001', 120),
+('MSC001', 'WH001', 500),
+('MSC002', 'WH001', 1000);
 GO

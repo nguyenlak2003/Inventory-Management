@@ -51,7 +51,10 @@ router.get('/:categoryName', async (req, res) => {
         
         const result = await request.query(query);
 
-        res.json(result.recordset);
+        res.json({
+            inventory: result.recordset,
+            userRole: userRole
+        });
 
     } catch (err) {
         console.error(`Lỗi khi truy vấn dữ liệu cho category '${categoryName}':`, err.message);
@@ -157,7 +160,7 @@ router.put('/items/:productID', async (req, res) => {
                     IsActive
                 FROM Products
                 JOIN ProductCategories ON Products.CategoryID  = ProductCategories.CategoryID
-                JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID
+                LEFT JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID
                 LEFT JOIN Inventory ON Products.ProductID = Inventory.ProductID
                 WHERE Products.ProductID  = @ProductID AND IsActive = 1
                 GROUP BY
