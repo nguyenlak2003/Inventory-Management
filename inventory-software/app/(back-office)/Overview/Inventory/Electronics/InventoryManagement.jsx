@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import InventoryTable from "./InventoryTable";
-import InventoryModal from "./InventoryModal";
+import InventoryTable from "./InventoryTable"; // File 2KB
+import InventoryModal from "./InventoryModal"; // File 7KB (chứa cả ItemDetails và EditForm)
 import { useRouter } from 'next/navigation';
 
 function InventoryManagement() {
@@ -10,22 +10,22 @@ function InventoryManagement() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [lastFocusedElement, setLastFocusedElement] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false); // true: EditForm, false: ItemDetails hoặc AddForm
+  const [isAddingNew, setIsAddingNew] = useState(false); // State mới để phân biệt Add New
+
   const [bodyOverflowStyle, setBodyOverflowStyle] = useState("auto");
   const closeButtonRef = useRef(null);
   const modalRef = useRef(null);
 
-  // State to store the inventory items from the database
   const [fetchedInventory, setFetchedInventory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const category = "Electronics";
-
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
-    if(!apiUrl) {
+    if (!apiUrl) { 
       console.error("API is not defined");
       setError("Không thấy API");
       setIsLoading(false);
@@ -33,12 +33,12 @@ function InventoryManagement() {
     }
 
     const fetchInventoryData = async () => {
-      setIsLoading(true);
+      setIsLoading(true); 
       setError(null);
 
       const token = localStorage.getItem("token");
 
-      if(!token) {
+      if (!token) { 
         setError("Bạn chưa đăng nhập. Vui lòng đăng nhập để xem dữ liệu.");
         setIsLoading(false);
         router.replace("/login");
@@ -54,66 +54,48 @@ function InventoryManagement() {
           }
         });
 
-        if(!response.ok) {
+        if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.message || `Lỗi HTTP: ${response.status}`);
         }
 
         const data = await response.json();
 
-        const mappedData = data.map(item => {
-
-          let derivedId = item.ProductID;
-          if (typeof item.ProductID === 'string' && item.ProductID.length >= 3) {
-            derivedId = item.ProductID.slice(-3);
-          } else if (typeof item.ProductID === 'string') {
-            derivedId = item.ProductID; // Giữ nguyên nếu ngắn hơn 3 ký tự
-          } else {
-            derivedId = String(Date.now()); // Fallback nếu ProductID không phải string
-          }
-
-          return {
-            id: derivedId,
-            code: item.ProductID,
-            name: item.ProductName,
-            quantity: item.Quantity,
-            sellPrice: item.SellingPrice,
-            buyPrice: item.ImportPrice,
-            description: item.Description,
-            unit: item.UnitOfMeasure,
-            providers: item.SupplierName,
-          }
-        });
+        const mappedData = data.map(item => ({
+          id: (typeof item.ProductID === 'string' && item.ProductID.length >= 3) ? item.ProductID.slice(-3) : item.ProductID,
+          code: item.ProductID,
+          categoryID: item.CategoryID,
+          name: item.ProductName,
+          quantity: item.Quantity,
+          sellPrice: parseFloat(item.SellingPrice),
+          buyPrice: parseFloat(item.ImportPrice),
+          description: item.Description,
+          unit: item.UnitOfMeasure,
+          providers: item.SupplierName ? [item.SupplierName] : [], 
+          category: item.CategoryName,
+          billingNumber: "", 
+          purchaseDate: "",  
+        }));
 
         setFetchedInventory(mappedData);
+
       } catch (err) {
         console.error(`Lỗi khi fetch inventory cho category '${category}':`, err);
         setError(err.message || "Không thể tải dữ liệu inventory.");
         setFetchedInventory([]);
-      } finally {
-        setIsLoading(false);
       }
+      finally { setIsLoading(false); }
     };
 
     fetchInventoryData();
-  }, [category, apiUrl, router]);;
+  }, [category, apiUrl, router]);
 
-  function openModal(item) {
+
+  const openDetailsModal = (item) => {
     setLastFocusedElement(document.activeElement);
-    setSelectedItem(
-      item || {
-        id: inventory.length + 1,
-        code: "",
-        name: "",
-        quantity: 0,
-        sellPrice: 0,
-        buyPrice: 0,
-        providers: [],
-        billingNumber: "",
-        purchaseDate: new Date().toISOString().split("T")[0],
-      },
-    );
-    setIsEditing(!item);
+    setSelectedItem(item); 
+    setIsEditing(false);   
+    setIsAddingNew(false);
     setIsModalOpen(true);
     setBodyOverflowStyle("hidden");
     setTimeout(() => {
@@ -121,15 +103,72 @@ function InventoryManagement() {
         closeButtonRef.current.focus();
       }
     }, 100);
-  }
+  };
 
-  async function editItem(item) {
-    setIsEditing(true);
-    openModal(item);
-  }
+  const openEditModal = (item) => {
+    setLastFocusedElement(document.activeElement);
+    setSelectedItem(item); // Item từ bảng
+    setIsEditing(true);    // QUAN TRỌNG: Để hiển thị EditForm
+    setIsAddingNew(false);
+    setIsModalOpen(true);
+    setBodyOverflowStyle("hidden");
+    setTimeout(() => {
+      if (closeButtonRef.current) {
+        closeButtonRef.current.focus();
+      }
+    }, 100);
+  };
+
+  const openAddNewModal = async () => {
+    const categoryIDForNewItem = fetchedInventory.length > 0 ? fetchedInventory[0].categoryID : null;
+    
+    if (!categoryIDForNewItem) {
+      alert("Không thể thêm sản phẩm mới vì không xác định được mã loại hàng. Vui lòng đảm bảo loại hàng này có ít nhất một sản phẩm.");
+      return;
+    }
+
+    try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(`${apiUrl}/api/inventory/next-code/${categoryIDForNewItem}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) {
+            throw new Error('Không thể lấy mã sản phẩm mới từ server.');
+        }
+
+        const data = await response.json();
+        const nextItemCode = data.nextCode;
+
+        setLastFocusedElement(document.activeElement);
+        setSelectedItem({
+            code: nextItemCode, 
+            name: "",
+            quantity: 0,
+            sellPrice: 0,
+            buyPrice: 0,
+            providers: [],
+            billingNumber: "",
+            purchaseDate: new Date().toISOString().split("T")[0],
+            description: "",
+            unit: "",
+            category: category,
+            categoryID: categoryIDForNewItem,
+        });
+
+        setIsEditing(true);
+        setIsAddingNew(true);
+        setIsModalOpen(true);
+        setBodyOverflowStyle("hidden");
+
+    } catch (error) {
+        console.error("Lỗi khi mở form thêm mới:", error);
+        alert(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.");
+    }
+  };
+
 
   async function removeItem(productCode) {
-
     if (confirm("Are you sure you want to remove this item?")) {
       const token = localStorage.getItem('token');
 
@@ -176,27 +215,102 @@ function InventoryManagement() {
     }
   }
 
-  function saveItem(updatedItem) {
-    if (updatedItem) {
-      const itemIndex = inventory.findIndex(
-        (item) => item.id === updatedItem.id,
-      );
-      if (itemIndex === -1) {
-        setInventory([...inventory, updatedItem]);
-      } else {
-        setInventory(
-          inventory.map((item) =>
-            item.id === updatedItem.id ? updatedItem : item,
-          ),
-        );
-      }
+  // Hàm saveItem sẽ xử lý cả Add và Edit
+  async function saveItem(itemDataFromForm) { 
+    const token = localStorage.getItem('token');
+    if (!apiUrl || !token) {
+      setError("Bạn chưa đăng nhập. Vui lòng đăng nhập để xem dữ liệu.");
+      setIsLoading(false);
+      router.replace("/login");  
+      return false;
     }
-    closeModal();
+
+    const productID = itemDataFromForm.code;
+
+    const payload = {
+      code: productID, 
+      name: itemDataFromForm.name,
+      quantity: itemDataFromForm.quantity,
+      sellPrice: itemDataFromForm.sellPrice,
+      buyPrice: itemDataFromForm.buyPrice,
+      description: itemDataFromForm.description,
+      unit: itemDataFromForm.unit,
+      categoryName: itemDataFromForm.category,
+      categoryID: itemDataFromForm.categoryID,
+      // Gửi categoryName cho backend
+      // providers, billingNumber, purchaseDate nếu backend xử lý việc lưu chúng
+    };
+
+    var response;
+    var endpoint = "";
+    var method = "";
+
+    try {
+      if (isAddingNew) { 
+        method = 'POST';
+        endpoint = `${apiUrl}/api/inventory/items`; // API POST để thêm mới
+      } else { // Nếu đang chỉnh sửa (isEditing=true và isAddingNew=false)
+        method = 'PUT';
+        endpoint = `${apiUrl}/api/inventory/items/${productID}`; // API PUT để cập nhật
+        if (!productID) {
+            setError("Không có ProductID để cập nhật.");
+            return false;
+        }
+      }
+
+      response = await fetch(endpoint, {
+        method: method,
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || `Lỗi HTTP: ${response.status}`);
+      }
+
+      const result = await response.json();
+      const savedItemFromApi = result.item;
+
+      const reMappedSavedItem = { /* ... ánh xạ dữ liệu từ API về dạng frontend ... */
+        id: (typeof savedItemFromApi.ProductID === 'string' && savedItemFromApi.ProductID.length >= 3) ? savedItemFromApi.ProductID.slice(-3) : savedItemFromApi.ProductID,
+        code: savedItemFromApi.ProductID,
+        name: savedItemFromApi.ProductName,
+        quantity: savedItemFromApi.Quantity,
+        sellPrice: parseFloat(savedItemFromApi.SellingPrice),
+        buyPrice: parseFloat(savedItemFromApi.ImportPrice),
+        description: savedItemFromApi.Description,
+        unit: savedItemFromApi.UnitOfMeasure,
+        category: savedItemFromApi.CategoryName,
+        providers: savedItemFromApi.SupplierName ? [savedItemFromApi.SupplierName] : [],
+        billingNumber: itemDataFromForm.billingNumber, // Giữ lại từ form nếu backend không trả về
+        purchaseDate: itemDataFromForm.purchaseDate,   // Giữ lại từ form
+      };
+
+      if (isAddingNew) {
+        setFetchedInventory(prev => [...prev, reMappedSavedItem]);
+      } else { // Editing
+        setFetchedInventory(prev => prev.map(item => (item.code === productID ? reMappedSavedItem : item)));
+      }
+
+      setError(null);
+      closeModal(); // Đổi tên hàm này cho nhất quán
+      return true;
+    } catch (err) {
+      console.error(`Lỗi khi ${isAddingNew ? "thêm mới" : "cập nhật"} sản phẩm:`, err);
+      setError(err.message || `Không thể ${isAddingNew ? "thêm mới" : "cập nhật"} sản phẩm.`);
+        return false;
+      }
   }
 
-  function closeModal() {
+  function closeModal() { // Đổi tên từ closeModalAction
     setIsModalOpen(false);
     setSelectedItem(null);
+    setIsEditing(false);
+    setIsAddingNew(false);
     setBodyOverflowStyle("auto");
     if (lastFocusedElement) {
       lastFocusedElement.focus();
@@ -211,48 +325,42 @@ function InventoryManagement() {
 
   return (
       <section className="p-5 mx-auto my-0 bg-stone-50 max-w-[1400px] max-sm:p-2.5">
+        <header className="flex justify-between items-center mb-8">
+          <h1 className="pb-2.5 text-3xl text-red-700 border-b-2 border-solid border-b-red-700">
+            {category.toUpperCase()} 
+          </h1>
+          <button
+            className="px-6 py-3 text-base bg-red-700 rounded cursor-pointer border-[none] text-[white]"
+            onClick={openAddNewModal} // Gọi hàm mở modal Add New
+          >
+            Add New Item
+          </button>
+        </header>
 
-      <header className="flex justify-between items-center mb-8">
-        <h1 className="pb-2.5 text-3xl text-red-700 border-b-2 border-solid border-b-red-700">
-          ELECTRONICS
-        </h1>
-        <button
-          className="px-6 py-3 text-base bg-red-700 rounded cursor-pointer border-[none] text-[white]"
-          onClick={() => openModal(null)}
-        >
-          Add New Item
-        </button>
-      </header>
-
-      {error && (
+         {error && (
         <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
           <span className="font-medium">Lỗi!</span> {error}
         </div>
       )}
 
-      <InventoryTable
-        inventory={fetchedInventory}
-        onOpenDetails={openModal}
-        onEditItem={editItem}
-        onRemoveItem={removeItem}
-              isModalOpen={isModalOpen}
-        //onUpdateItem={updateItem}
-      />
-
-      {isModalOpen && (
-        <InventoryModal
-          isOpen={isModalOpen}
-          selectedItem={selectedItem}
-          isEditing={isEditing}
-          bodyOverflowStyle={bodyOverflowStyle}
-          closeButtonRef={closeButtonRef}
-          modalRef={modalRef}
-          onClose={closeModal}
-          onSave={saveItem}
-          onKeyDown={handleKeyDown}
+        <InventoryTable
+          inventory={fetchedInventory}
+          onOpenDetails={openDetailsModal}
+          onEditItem={openEditModal}     
+          onRemoveItem={removeItem}
         />
-      )}
-    </section>
+
+        {isModalOpen && ( 
+          <InventoryModal 
+            isOpen={isModalOpen}
+            selectedItem={selectedItem}
+            isAddingNew={isAddingNew}
+            isEditing={isEditing}
+            onClose={closeModal}
+            onSave={saveItem} 
+          />
+        )}
+      </section>
   );
 }
 

@@ -1,124 +1,110 @@
-import React, { useState, useEffect, useRef } from "react";
+"use client";
 
-function EditItemModal({ isOpen, item, onSave, onClose }) {
-    const [form, setForm] = useState(item || {});
-    const firstInputRef = useRef(null);
+import React, { useState, useEffect } from "react";
+import ActionButton from "./ActionButton"; 
 
-    useEffect(() => {
-        setForm(item || {});
-        if (isOpen && firstInputRef.current) {
-            firstInputRef.current.focus();
-        }
-    }, [item, isOpen]);
+function InventoryForm({ itemToEdit, onSave, onCancel, isAddingNew }) {
+  const [formData, setFormData] = useState({});
 
-    if (!isOpen) return null;
+  useEffect(() => {
+    setFormData(itemToEdit || {
+        code: "", 
+        name: "", 
+        quantity: 0, 
+        sellPrice: 0, 
+        buyPrice: 0,
+        categoryID: "",
+        providers: [], 
+        billingNumber: "", 
+        purchaseDate: new Date().toISOString().split("T")[0],
+        description: "", 
+        unit: "", 
+        category: ""
+    });
+  }, [itemToEdit, isAddingNew]);
 
-    function handleChange(e) {
-        const { name, value } = e.target;
-        setForm((prev) => ({
-            ...prev,
-            [name]:
-                name === "quantity"
-                    ? Number(value)
-                    : name === "sellPrice" || name === "buyPrice"
-                        ? parseFloat(value)
-                        : value,
-        }));
-    }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+        ...prev,
+        [name]: (name === "quantity" || name === "sellPrice" || name === "buyPrice")
+                    ? Number(value) || 0 // Đảm bảo giá trị là số
+                    : value
+    }));
+  };
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        onSave(form);
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSave(formData);
+  };
 
-    return (
-        <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
-            role="dialog"
-            aria-modal="true"
-        >
-            <form
-                className="bg-white rounded-lg shadow-lg p-8 min-w-[320px] max-w-[95vw]"
-                onSubmit={handleSubmit}
-            >
-                <h2 className="text-xl font-semibold mb-4">Edit Item</h2>
-                <div className="mb-3">
-                    <label className="block mb-1 font-medium">Item Code</label>
-                    <input
-                        ref={firstInputRef}
-                        name="code"
-                        value={form.code || ""}
-                        onChange={handleChange}
-                        className="w-full border px-3 py-2 rounded"
-                        required
-                    />
-                </div>
-                <div className="mb-3">
-                    <label className="block mb-1 font-medium">Name</label>
-                    <input
-                        name="name"
-                        value={form.name || ""}
-                        onChange={handleChange}
-                        className="w-full border px-3 py-2 rounded"
-                        required
-                    />
-                </div>
-                <div className="mb-3">
-                    <label className="block mb-1 font-medium">Quantity</label>
-                    <input
-                        name="quantity"
-                        type="number"
-                        min="0"
-                        value={form.quantity || 0}
-                        onChange={handleChange}
-                        className="w-full border px-3 py-2 rounded"
-                        required
-                    />
-                </div>
-                <div className="mb-3">
-                    <label className="block mb-1 font-medium">Sell Price</label>
-                    <input
-                        name="sellPrice"
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value={form.sellPrice || 0}
-                        onChange={handleChange}
-                        className="w-full border px-3 py-2 rounded"
-                        required
-                    />
-                </div>
-                <div className="mb-3">
-                    <label className="block mb-1 font-medium">Buy Price</label>
-                    <input
-                        name="buyPrice"
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value={form.buyPrice || 0}
-                        onChange={handleChange}
-                        className="w-full border px-3 py-2 rounded"
-                        required
-                    />
-                </div>
-                <div className="flex justify-end gap-2 mt-6">
-                    <button
-                        type="button"
-                        className="px-4 py-2 rounded bg-gray-200"
-                        onClick={onClose}
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        type="submit"
-                        className="px-4 py-2 rounded bg-red-700 text-white"
-                    >
-                        Save
-                    </button>
-                </div>
-            </form>
+  const isCodeDisabled = true; 
+
+  return (
+    <form onSubmit={handleSubmit}>
+      {/* Input cho Item Code */}
+      <div className="mb-3">
+        <label htmlFor="item-code-modal" className="block mb-1 font-medium">Item Code:</label>
+        <input
+          id="item-code-modal"
+          name="code"
+          type="text"
+          className="p-2 mt-1.5 w-full rounded border border-solid border-stone-300 bg-gray-100"
+          value={formData.code || ""}
+          onChange={handleChange}
+          readOnly={isCodeDisabled} // Không cho sửa mã khi đang edit
+        />
+      </div>
+
+      {/* Input cho Name */}
+      <div className="mb-3">
+        <label htmlFor="item-name-modal" className="block mb-1 font-medium">Name:</label>
+        <input id="item-name-modal" name="name" type="text" className="p-2 mt-1.5 w-full rounded border border-solid border-stone-300" value={formData.name || ""} onChange={handleChange} required />
+      </div>
+
+      {/* Input cho Quantity */}
+      {!isAddingNew && (
+        <div className="mb-3">
+          <label htmlFor="item-quantity-modal" className="block mb-1 font-medium">Quantity:</label>
+          <input id="item-quantity-modal" name="quantity" type="number" min="0" className="p-2 mt-1.5 w-full rounded border border-solid border-stone-300" value={formData.quantity || 0} onChange={handleChange} required />
         </div>
-    );
+      )}
+
+      {/* Input cho Sell Price và Buy Price */}
+      <div className="flex gap-4 mb-3">
+        <div className="w-1/2">
+          <label htmlFor="sell-price-modal" className="block mb-1 font-medium">Sell Price:</label>
+          <input id="sell-price-modal" name="sellPrice" type="number" step="any" min="0" className="p-2 mt-1.5 w-full rounded border border-solid border-stone-300" value={formData.sellPrice || ""} onChange={handleChange} required />
+        </div>
+        <div className="w-1/2">
+          <label htmlFor="buy-price-modal" className="block mb-1 font-medium">Buy Price:</label>
+          <input id="buy-price-modal" name="buyPrice" type="number" step="any" min="0" className="p-2 mt-1.5 w-full rounded border border-solid border-stone-300" value={formData.buyPrice || ""} onChange={handleChange} required />
+        </div>
+      </div>
+
+      {/* Input cho Unit */}
+      <div className="mb-3">
+        <label htmlFor="item-unit-modal" className="block mb-1 font-medium">Unit:</label>
+        <input id="item-unit-modal" name="unit" type="text" className="p-2 mt-1.5 w-full rounded border border-solid border-stone-300" value={formData.unit || ""} onChange={handleChange} />
+      </div>
+
+      {/* Input cho Description */}
+      <div className="mb-3">
+        <label htmlFor="item-description-modal" className="block mb-1 font-medium">Description:</label>
+        <textarea id="item-description-modal" name="description" className="p-2 mt-1.5 w-full rounded border border-solid border-stone-300" value={formData.description || ""} onChange={handleChange} rows="2"></textarea>
+      </div>
+      
+      {/* Nút Save và Cancel */}
+      <div className="flex gap-2.5 mt-5">
+        <ActionButton variant="primary" type="submit">
+          {isAddingNew ? "Add Item" : "Save Changes"}
+        </ActionButton>
+        <ActionButton variant="secondary" type="button" onClick={onCancel}>
+          Cancel
+        </ActionButton>
+      </div>
+    </form>
+  );
 }
 
-export default EditItemModal;
+export default InventoryForm;

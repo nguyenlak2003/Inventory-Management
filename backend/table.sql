@@ -56,8 +56,9 @@ CREATE TABLE Products (
     UnitOfMeasure NVARCHAR(50),
     ImportPrice DECIMAL(18, 2),
     SellingPrice DECIMAL(18, 2),
-    SupplierID VARCHAR(50),
+    SupplierID VARCHAR(50) NULL,
     CategoryID VARCHAR(50),
+    IsActive BIT DEFAULT 1, 
     FOREIGN KEY (SupplierID) REFERENCES Suppliers(SupplierID),
     FOREIGN KEY (CategoryID) REFERENCES ProductCategories(CategoryID)
 );
