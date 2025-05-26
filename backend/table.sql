@@ -1,6 +1,13 @@
 USE inventory;
 GO
 
+CREATE TABLE Employee (
+    Username VARCHAR(50) PRIMARY KEY,
+    Password VARCHAR(100),
+    Role VARCHAR(50),
+);
+GO
+
 --1. NhaCungCap (Suppliers) - Manual Primary Key Input
 CREATE TABLE Suppliers (
     SupplierID VARCHAR(50) PRIMARY KEY,
@@ -92,7 +99,7 @@ GO
 
 --9. Chi Tiết Phiếu Nhập Kho (Inbound Order Details) - Auto-generated Primary Key (Identity)
 CREATE TABLE InboundOrderDetails (
-    
+
     InboundDetailID INT PRIMARY KEY IDENTITY(1,1),
     InboundOrderID VARCHAR(50),
     ProductID VARCHAR(50),

@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 
 function InventoryManagement() {
   const router = useRouter();
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [lastFocusedElement, setLastFocusedElement] = useState(null);

@@ -24,12 +24,12 @@ router.get('/:categoryName', async (req, res) => {
                     CategoryName,
                     SupplierName,
                     COALESCE(SUM(Quantity), 0) AS Quantity,
-                    IsActive
+                    Products.IsActive
                 FROM Products
                 JOIN ProductCategories ON Products.CategoryID  = ProductCategories.CategoryID
                 LEFT JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID
                 LEFT JOIN Inventory ON Products.ProductID = Inventory.ProductID
-                WHERE ProductCategories.CategoryName  = @CategoryName AND IsActive = 1
+                WHERE ProductCategories.CategoryName  = @CategoryName AND Products.IsActive = 1
                 GROUP BY
                     Products.ProductID,
                     Products.CategoryID, 
@@ -40,7 +40,7 @@ router.get('/:categoryName', async (req, res) => {
                     SellingPrice,
                     CategoryName,
                     SupplierName, 
-                    IsActive`;
+                    Products.IsActive`;
 
         if (userRole !== 'admin') {
             query += ' HAVING COALESCE(SUM(Inventory.Quantity), 0) > 0';

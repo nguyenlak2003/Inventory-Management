@@ -50,7 +50,6 @@ function InventoryModal({
       aria-modal="true"
       aria-labelledby="modal-title"
       className="flex fixed inset-0 justify-center items-center bg-black bg-opacity-50 z-[1000]"
-      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div className="relative p-6 md:p-8 rounded-lg bg-white max-w-lg w-[90%] max-sm:p-5 max-sm:w-[95%]">
         <button
