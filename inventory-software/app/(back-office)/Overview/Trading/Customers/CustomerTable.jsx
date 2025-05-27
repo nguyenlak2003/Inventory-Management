@@ -1,22 +1,22 @@
 import React from "react";
 import ActionButton from "./ActionButton";
 
-function SupplierTable({
-  suppliers,
+function CustomerTable({
+  customers,
   onOpenDetails,
   onEditItem,
   onRemoveItem,
 }) {
 
-    if (!suppliers || suppliers.length === 0) {
-        return <div className="p-10 text-base text-center text-zinc-600">Không có nhà cung cấp nào để hiển thị.</div>;
+    if (!customers || customers.length === 0) {
+        return <div className="p-10 text-base text-center text-zinc-600">Không có khách hàng nào để hiển thị.</div>;
     }
 
     return (
       <div className="overflow-auto rounded-lg bg-[white] shadow-[0_2px_4px_rgba(0,0,0,0.1)]">
         <table
           role="table"
-          aria-label="Inventory Items"
+          aria-label="Customer Items"
           className="w-full border-separate border-spacing-0 max-sm:text-sm border border-gray-300"
         >
           <thead>
@@ -39,7 +39,7 @@ function SupplierTable({
             </tr>
           </thead>
           <tbody>
-            {suppliers?.map((item) => (
+            {customers?.map((item) => (
               <TableRow
                 key={item.code}
                 item={item}
@@ -86,4 +86,4 @@ return (
 );
 }
 
-export default SupplierTable;
+export default CustomerTable;

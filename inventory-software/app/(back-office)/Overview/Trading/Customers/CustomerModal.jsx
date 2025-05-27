@@ -2,10 +2,10 @@
 "use client";
 
 import React from "react";
-import SupplierForm from "./EditItemModal"
+import CustomerForm from "./EditItemModal"
 import ActionButton from "./ActionButton";
 
-function SupplierModal({
+function CustomerModal({
   isOpen,
   selectedItem,
   isEditing,
@@ -40,7 +40,7 @@ return (
       >
         {isEditing ? (
           <span>
-            {!isAddingNew ? <span>Edit Supplier</span> : <span>Add New Supplier</span>}
+            {!isAddingNew ? <span>Edit Customer</span> : <span>Add New Customer</span>}
           </span>
         ) : (
           <>
@@ -50,7 +50,7 @@ return (
       </h2>
       <div className="grid gap-4">
         {isEditing ? (
-          <SupplierForm
+          <CustomerForm
             itemToEdit={selectedItem}
             isAddingNew={isAddingNew}
             onSave={onSave}
@@ -77,4 +77,4 @@ function ItemDetails({ selectedItem }) {
   );
 }
 
-export default SupplierModal;
+export default CustomerModal;

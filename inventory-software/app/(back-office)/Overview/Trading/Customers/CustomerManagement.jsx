@@ -2,11 +2,10 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from 'next/navigation';
-import SupplierTable from "./SupplierTable";
-import SupplierModal from "./SupplierModal";
-import ActionButton from "./ActionButton";
+import CustomerTable from "./CustomerTable";
+import CustomerModal from "./CustomerModal";
 
-function SupplierManagement() {
+function CustomerManagement() {
   const router = useRouter();
   
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,12 +16,12 @@ function SupplierManagement() {
 
   const closeButtonRef = useRef(null);
   
-  const [fetchedSuppliers, setFetchedSuppliers] = useState([]);
+  const [fetchedCustomers, setFetchedCustomers] = useState([]);
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
-    const fetchSuppliersData = async () => {
+    const fetchCustomersData = async () => {
       const token = localStorage.getItem("token");
 
       if (!token) { 
@@ -33,7 +32,7 @@ function SupplierManagement() {
       }
 
       try {
-        const response = await fetch(`${apiUrl}/api/suppliers`, {
+        const response = await fetch(`${apiUrl}/api/customers`, {
           method: "GET",
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -49,21 +48,21 @@ function SupplierManagement() {
         const data = await response.json();
 
         const mappedData = data.map(item => ({
-          code: item.SupplierID,
-          name: item.SupplierName,
+          code: item.CustomerID,
+          name: item.CustomerName,
           phone: item.PhoneNumber,
           address: item.Addr,
           email: item.Email,
         }));
 
-        setFetchedSuppliers(mappedData);
+        setFetchedCustomers(mappedData);
 
       } catch (err) {
-        console.error("Error fetching suppliers:", err);
+        console.error("Error fetching Customer:", err);
       }
     }
 
-    fetchSuppliersData();
+    fetchCustomersData();
   }, [apiUrl, router]);
 
 
@@ -98,12 +97,12 @@ function SupplierManagement() {
     try {
         const token = localStorage.getItem("token");
 
-        const response = await fetch(`${apiUrl}/api/suppliers/next-code/`, {
+        const response = await fetch(`${apiUrl}/api/customers/next-code/`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
         if (!response.ok) {
-            throw new Error('Không thể lấy mã nhà cung cấp mới từ server.');
+            throw new Error('Không thể lấy mã khách hàng mới từ server.');
         }
 
         const data = await response.json();
@@ -128,7 +127,7 @@ function SupplierManagement() {
 
   };
 
-  const removeItem = async (supplierID) => {
+  const removeItem = async (customerID) => {
     if(confirm("Are you sure you want to remove this item?")) {
       const token = localStorage.getItem('token');
 
@@ -138,7 +137,7 @@ function SupplierManagement() {
       }
 
       try {
-        const response = await fetch(`${apiUrl}/api/suppliers/${supplierID}/deActive`, {
+        const response = await fetch(`${apiUrl}/api/customers/${customerID}/deActive`, {
           method: "PUT",
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -162,8 +161,8 @@ function SupplierManagement() {
         }
         return; 
       }
-        setFetchedSuppliers(prevSuppliers =>
-        prevSuppliers.filter((item) => item.code !== supplierID));   
+        setFetchedCustomers(prevCustomers =>
+        prevCustomers.filter((item) => item.code !== customerID));   
 
       } catch (err) {
         
@@ -181,11 +180,11 @@ function SupplierManagement() {
       return false;
     }
 
-    const supplierID = itemDataFromForm.code;
+    const customerID = itemDataFromForm.code;
 
     const payload = {
-      SupplierID: itemDataFromForm.code,
-      SupplierName: itemDataFromForm.name,
+      CustomerID: itemDataFromForm.code,
+      CustomerName: itemDataFromForm.name,
       PhoneNumber: itemDataFromForm.phone,
       Addr: itemDataFromForm.address,
       Email: itemDataFromForm.email,
@@ -193,8 +192,8 @@ function SupplierManagement() {
 
     const method = isAddingNew ? "POST" : "PUT";
     const endpoint = isAddingNew 
-      ? `${apiUrl}/api/suppliers` 
-      : `${apiUrl}/api/suppliers/${supplierID}`;
+      ? `${apiUrl}/api/customers` 
+      : `${apiUrl}/api/customers/${customerID}`;
 
     try {
 
@@ -213,9 +212,9 @@ function SupplierManagement() {
       }
 
       if (isAddingNew) {
-        setFetchedSuppliers(prev => [...prev, itemDataFromForm]);
+        setFetchedCustomers(prev => [...prev, itemDataFromForm]);
       } else { // Editing
-        setFetchedSuppliers(prev => prev.map(item => (item.code === supplierID ? itemDataFromForm : item)));      
+        setFetchedCustomers(prev => prev.map(item => (item.code === customerID ? itemDataFromForm : item)));      
       }
 
       //setError(null);
@@ -261,15 +260,15 @@ function SupplierManagement() {
         </button>
       </header>
 
-      <SupplierTable
-        suppliers={fetchedSuppliers}
+      <CustomerTable
+        customers={fetchedCustomers}
         onOpenDetails={openDetailsModal}
         onEditItem={openEditModal}
         onRemoveItem={removeItem}
       />
 
       {isModalOpen && (
-        <SupplierModal
+        <CustomerModal
           isOpen={isModalOpen}
           selectedItem={selectedItem}
           isAddingNew={isAddingNew}
@@ -282,4 +281,4 @@ function SupplierManagement() {
   );
 }
 
-export default SupplierManagement;
+export default CustomerManagement;
