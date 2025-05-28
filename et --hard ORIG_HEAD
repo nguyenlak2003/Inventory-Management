@@ -1,0 +1,78 @@
+[33m22b44d8[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mlocal[m[33m)[m HEAD@{0}: pull: Merge made by the 'ort' strategy.
+[33m46898d9[m HEAD@{1}: commit: fix
+[33m5405899[m HEAD@{2}: commit: add
+[33me786a6e[m HEAD@{3}: commit: add: provider and customer
+[33m293cc61[m HEAD@{4}: commit: add
+[33mc9f6197[m HEAD@{5}: commit: add: logout
+[33mcfd9081[m HEAD@{6}: commit: finish electronics inventory
+[33m03ccd7d[m HEAD@{7}: commit: add remove in inventory
+[33mdc264a0[m HEAD@{8}: commit (merge): Add .gitignore and resolve conflicts by removing ignored files
+[33mb97397c[m HEAD@{9}: checkout: moving from San to local
+[33m1454de7[m[33m ([m[1;31morigin/San[m[33m, [m[1;32mSan[m[33m)[m HEAD@{10}: pull: Fast-forward
+[33m969a740[m HEAD@{11}: checkout: moving from local to San
+[33mb97397c[m HEAD@{12}: pull: Merge made by the 'ort' strategy.
+[33m2a0071d[m HEAD@{13}: commit: add: remove inventory
+[33ma7e96e3[m HEAD@{14}: commit: update: electronics
+[33ma023aee[m HEAD@{15}: merge San: Merge made by the 'ort' strategy.
+[33maf03228[m HEAD@{16}: checkout: moving from San to local
+[33m969a740[m HEAD@{17}: pull: Fast-forward
+[33ma0bb05f[m HEAD@{18}: checkout: moving from local to San
+[33maf03228[m HEAD@{19}: commit: update .sql
+[33me9474c0[m HEAD@{20}: merge San: Merge made by the 'ort' strategy.
+[33m58e018f[m HEAD@{21}: checkout: moving from San to local
+[33ma0bb05f[m HEAD@{22}: pull: Fast-forward
+[33mf82a800[m HEAD@{23}: checkout: moving from local to San
+[33m58e018f[m HEAD@{24}: commit: a
+[33m5c132b7[m HEAD@{25}: merge San: Merge made by the 'ort' strategy.
+[33m316820a[m[33m ([m[1;32mmain[m[33m)[m HEAD@{26}: checkout: moving from San to local
+[33mf82a800[m HEAD@{27}: reset: moving to HEAD
+[33mf82a800[m HEAD@{28}: checkout: moving from local to San
+[33m316820a[m[33m ([m[1;32mmain[m[33m)[m HEAD@{29}: reset: moving to HEAD
+[33m316820a[m[33m ([m[1;32mmain[m[33m)[m HEAD@{30}: merge main: Fast-forward
+[33m6e00730[m HEAD@{31}: checkout: moving from main to local
+[33m316820a[m[33m ([m[1;32mmain[m[33m)[m HEAD@{32}: pull: Fast-forward
+[33m5cff08c[m HEAD@{33}: checkout: moving from local to main
+[33m6e00730[m HEAD@{34}: reset: moving to HEAD
+[33m6e00730[m HEAD@{35}: pull: Merge made by the 'ort' strategy.
+[33mcb1dbf1[m HEAD@{36}: commit: fix structure app and add logout function
+[33mceaa306[m HEAD@{37}: merge main: Merge made by the 'ort' strategy.
+[33m18ddf44[m HEAD@{38}: checkout: moving from main to local
+[33m5cff08c[m HEAD@{39}: merge origin/San2: Merge made by the 'ort' strategy.
+[33m2403589[m HEAD@{40}: checkout: moving from main to main
+[33m2403589[m HEAD@{41}: checkout: moving from local to main
+[33m18ddf44[m HEAD@{42}: commit: add: logic login
+[33m2403589[m HEAD@{43}: checkout: moving from main to local
+[33m2403589[m HEAD@{44}: checkout: moving from local to main
+[33m2403589[m HEAD@{45}: merge main: Fast-forward
+[33m4456486[m HEAD@{46}: checkout: moving from main to local
+[33m2403589[m HEAD@{47}: pull origin main: Fast-forward
+[33mb8211cd[m HEAD@{48}: reset: moving to HEAD
+[33mb8211cd[m HEAD@{49}: checkout: moving from local to main
+[33m4456486[m HEAD@{50}: commit: add: backend
+[33m5a65946[m HEAD@{51}: commit: delete: api
+[33m604ddce[m HEAD@{52}: merge main: Merge made by the 'ort' strategy.
+[33m42ce81c[m HEAD@{53}: commit: aaa
+[33mcccbff5[m HEAD@{54}: checkout: moving from main to local
+[33mb8211cd[m HEAD@{55}: reset: moving to HEAD
+[33mb8211cd[m HEAD@{56}: checkout: moving from local to main
+[33mcccbff5[m HEAD@{57}: checkout: moving from main to local
+[33mb8211cd[m HEAD@{58}: checkout: moving from main to main
+[33mb8211cd[m HEAD@{59}: reset: moving to HEAD
+[33mb8211cd[m HEAD@{60}: checkout: moving from local to main
+[33mcccbff5[m HEAD@{61}: reset: moving to HEAD
+[33mcccbff5[m HEAD@{62}: reset: moving to HEAD
+[33mcccbff5[m HEAD@{63}: reset: moving to HEAD
+[33mcccbff5[m HEAD@{64}: checkout: moving from main to local
+[33mb8211cd[m HEAD@{65}: pull origin main: Merge made by the 'ort' strategy.
+[33md627597[m HEAD@{66}: checkout: moving from local to main
+[33mcccbff5[m HEAD@{67}: commit: tmp
+[33mcbca910[m HEAD@{68}: checkout: moving from main to local
+[33md627597[m HEAD@{69}: reset: moving to HEAD
+[33md627597[m HEAD@{70}: commit: aaaa
+[33m89b42e2[m HEAD@{71}: checkout: moving from local to main
+[33mcbca910[m HEAD@{72}: commit: base
+[33m7de3bca[m HEAD@{73}: commit: test branch
+[33m89b42e2[m HEAD@{74}: checkout: moving from main to local
+[33m89b42e2[m HEAD@{75}: commit: base
+[33m09ad165[m HEAD@{76}: Branch: renamed refs/heads/master to refs/heads/main
+[33m09ad165[m HEAD@{78}: commit (initial): first commit
