@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\inventory-software",
+    "\\inventory-software\\app",
+    "\\inventory-software\\app\\(back-office)",
+    "\\inventory-software\\app\\(back-office)\\Overview",
+    "\\inventory-software\\app\\(back-office)\\Overview\\Trading",
+    "\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Customers",
+    "\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Employees",
+    "\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Inbound",
+    "\\inventory-software\\components"
+  ],
+  "PreviewInSolutionExplorer": false
+}

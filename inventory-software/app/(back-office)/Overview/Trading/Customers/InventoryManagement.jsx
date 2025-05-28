@@ -67,7 +67,13 @@ function InventoryManagement() {
     setIsEditing(true);
     openModal(item);
   }
-
+    function updateItem(updatedItem) {
+        setInventory((prev) =>
+            prev.map((item) =>
+                item.id === updatedItem.id ? { ...item, ...updatedItem } : item
+            )
+        );
+    }
   function removeItem(id) {
     if (confirm("Are you sure you want to remove this item?")) {
       setInventory(inventory.filter((item) => item.id !== id));
@@ -127,7 +133,8 @@ function InventoryManagement() {
         onOpenDetails={openModal}
         onEditItem={editItem}
         onRemoveItem={removeItem}
-        isModalOpen={isModalOpen}
+              isModalOpen={isModalOpen}
+        onUpdateItem={updateItem}
       />
 
       {isModalOpen && (

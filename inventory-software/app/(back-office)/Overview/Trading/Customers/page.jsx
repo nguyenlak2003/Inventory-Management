@@ -2,7 +2,7 @@
 
 "use client"
 import React, { useState } from "react";
-//import "./style.css"; // Adjust the path if needed
+
 import Link from 'next/link';
 import InventoryManagement from "./InventoryManagement";
 import SidebarMenu from "../../SidebarMenu/SidebarMenu";
