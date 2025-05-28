@@ -9,6 +9,7 @@ function SupplierModal({
   isOpen,
   selectedItem,
   isEditing,
+  isAddingNew,
   onClose,
   onSave,
   onKeyDown,
@@ -39,7 +40,7 @@ return (
       >
         {isEditing ? (
           <span>
-            {selectedItem?.id ? <span>Edit Supplier</span> : <span>Add New Supplier</span>}
+            {!isAddingNew ? <span>Edit Supplier</span> : <span>Add New Supplier</span>}
           </span>
         ) : (
           <>
@@ -50,8 +51,9 @@ return (
       <div className="grid gap-4">
         {isEditing ? (
           <SupplierForm
-            selectedItem={selectedItem}
-            onSave={handleSave}
+            itemToEdit={selectedItem}
+            isAddingNew={isAddingNew}
+            onSave={onSave}
             onCancel={onClose}
           />
         ) : (

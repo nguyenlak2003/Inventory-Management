@@ -2,13 +2,13 @@ import React from "react";
 import ActionButton from "./ActionButton";
 
 function SupplierTable({
-  supppliers,
+  suppliers,
   onOpenDetails,
   onEditItem,
   onRemoveItem,
 }) {
 
-    if (!supppliers || supppliers.length === 0) {
+    if (!suppliers || suppliers.length === 0) {
         return <div className="p-10 text-base text-center text-zinc-600">Không có nhà cung cấp nào để hiển thị.</div>;
     }
 
@@ -39,7 +39,7 @@ function SupplierTable({
             </tr>
           </thead>
           <tbody>
-            {supppliers?.map((item) => (
+            {suppliers?.map((item) => (
               <TableRow
                 key={item.code}
                 item={item}

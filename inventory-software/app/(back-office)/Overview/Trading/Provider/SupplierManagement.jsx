@@ -17,7 +17,7 @@ function SupplierManagement() {
 
   const closeButtonRef = useRef(null);
   
-  const [fetchedSupppliers, setFetchedSuppliers] = useState([]);
+  const [fetchedSuppliers, setFetchedSuppliers] = useState([]);
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -93,28 +93,141 @@ function SupplierManagement() {
     }, 100);
   }
 
-  const removeItem = (supplierID) => {
+  const openAddNewModal = async () => {
+
+    try {
+        const token = localStorage.getItem("token");
+
+        const response = await fetch(`${apiUrl}/api/suppliers/next-code/`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) {
+            throw new Error('Không thể lấy mã nhà cung cấp mới từ server.');
+        }
+
+        const data = await response.json();
+        setLastFocusedElement(document.activeElement);
+
+        setSelectedItem({
+            code: data.nextCode, 
+            name: "",
+            phone: "",
+            address: "",
+            email: "",
+        });
+
+        setIsEditing(true);
+        setIsAddingNew(true);
+        setIsModalOpen(true);
+
+    } catch (error) {
+        console.error("Lỗi khi mở form thêm mới:", error);
+        alert(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.");
+    }
+
+  };
+
+  const removeItem = async (supplierID) => {
     if(confirm("Are you sure you want to remove this item?")) {
       const token = localStorage.getItem('token');
+
+      if(!token) {
+        setError("Bạn chưa đăng nhập hoặc lỗi cấu hình");
+        return;
+      }
+
+      try {
+        const response = await fetch(`${apiUrl}/api/suppliers/${supplierID}/deActive`, {
+          method: "PUT",
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          }
+        });
+
+      if (!response.ok) {
+        let errorData = { message: `Lỗi HTTP: ${response.status}. Không thể đọc chi tiết lỗi từ server.` };
+        try {
+            errorData = await response.json();
+        } catch (e) {
+            console.error("Không thể parse JSON lỗi từ server:", e);
+        }
+
+        if (response.status === 403) {
+          console.log("Lỗi 403 từ server:", errorData.message);
+          setError("Chỉ admin mới có quyền thực hiện thao tác này."); 
+        } else {
+          setError(errorData.message || `Lỗi HTTP: ${response.status}`);
+        }
+        return; 
+      }
+        setFetchedSuppliers(prevSuppliers =>
+        prevSuppliers.filter((item) => item.code !== supplierID));   
+
+      } catch (err) {
+        
+      }
     }
   }
 
-  function saveItem(updatedItem) {
-    if (updatedItem) {
-      const itemIndex = inventory.findIndex(
-        (item) => item.id === updatedItem.id,
-      );
-      if (itemIndex === -1) {
-        setInventory([...inventory, updatedItem]);
-      } else {
-        setInventory(
-          inventory.map((item) =>
-            item.id === updatedItem.id ? updatedItem : item,
-          ),
-        );
-      }
+  const saveItem = async (itemDataFromForm) => {
+    const token = localStorage.getItem('token');
+
+    if(!token) {
+      setError("Bạn chưa đăng nhập. Vui lòng đăng nhập.");
+      setIsLoading(false);
+      router.replace("/");  
+      return false;
     }
-    closeModal();
+
+    const supplierID = itemDataFromForm.code;
+
+    const payload = {
+      SupplierID: itemDataFromForm.code,
+      SupplierName: itemDataFromForm.name,
+      PhoneNumber: itemDataFromForm.phone,
+      Addr: itemDataFromForm.address,
+      Email: itemDataFromForm.email,
+    };
+
+    const method = isAddingNew ? "POST" : "PUT";
+    const endpoint = isAddingNew 
+      ? `${apiUrl}/api/suppliers` 
+      : `${apiUrl}/api/suppliers/${supplierID}`;
+
+    try {
+
+      const response = await fetch(endpoint, {
+        method: method,
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || `Lỗi HTTP: ${response.status}`);
+      }
+
+      if (isAddingNew) {
+        setFetchedSuppliers(prev => [...prev, itemDataFromForm]);
+      } else { // Editing
+        setFetchedSuppliers(prev => prev.map(item => (item.code === supplierID ? itemDataFromForm : item)));      
+      }
+
+      //setError(null);
+      closeModal(); // Đổi tên hàm này cho nhất quán
+      return true;
+
+    } catch (error) {
+      //setError(error.message);
+      console.error(`Lỗi khi lưu nhà cung cấp:`, error);
+      return false;
+    }
+
   }
 
   function closeModal() {
@@ -142,14 +255,14 @@ function SupplierManagement() {
         </h1>
         <button
           className="px-6 py-3 text-base bg-red-700 rounded cursor-pointer border-[none] text-[white]"
-          onClick={() => openModal(null)}
+          onClick={openAddNewModal}
         >
           Add New Item
         </button>
       </header>
 
       <SupplierTable
-        supppliers={fetchedSupppliers}
+        suppliers={fetchedSuppliers}
         onOpenDetails={openDetailsModal}
         onEditItem={openEditModal}
         onRemoveItem={removeItem}
