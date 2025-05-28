@@ -7,7 +7,8 @@
     "\\inventory-software\\app\\(back-office)\\Overview",
     "\\inventory-software\\app\\(back-office)\\Overview\\Trading",
     "\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Customers",
-    "\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Employees",
+    "\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Inbound",
+    "\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Outbound",
     "\\inventory-software\\components"
   ],
   "SelectedNode": "\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Customers",
