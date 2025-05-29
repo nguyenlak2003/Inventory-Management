@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 
 import Link from 'next/link';
-import PurchaseOrderManagement from "./PurchaseOrderManagement";
+import PurchaseOrderManagement from "./SellOrderManagement";
 import SidebarMenu from "../../SidebarMenu/SidebarMenu";
 
 export default function InventoryManagemnet() {

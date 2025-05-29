@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import PurchaseOrderTable from "./PurchaseOrderTable";
+import PurchaseOrderTable from "./SellOrderTable";
 import AddOrderModal from "./AddOrderModal";
 import OrderDetailsModal from "./OrderDetailsModal";
 function PurchaseOrderManagement() {
@@ -47,7 +47,7 @@ function PurchaseOrderManagement() {
     <section className="p-5 max-sm:p-2.5">
       <header className="flex justify-between items-center mb-5">
         <h1 className="pb-2 text-2xl font-semibold text-red-600 border-solid border-b-[3px] border-b-red-600">
-          Purchase Orders
+          Sale Orders
         </h1>
         <button
           className="px-5 py-2.5 text-sm font-medium bg-red-600 rounded cursor-pointer border-[none] text-white"

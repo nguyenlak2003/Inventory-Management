@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import OrderTableHeader from "./OrderTableHeader";
 
 function PurchaseOrderTable({ orders, onRemoveOrder, onShowDetails }) {
-  const [sortColumn, setSortColumn] = useState("date");
+  const [sortColumn, setSortColumn] = useState("dispatchDate");
   const [sortDirection, setSortDirection] = useState("desc");
 
   const sortTable = (column) => {
@@ -24,8 +24,8 @@ function PurchaseOrderTable({ orders, onRemoveOrder, onShowDetails }) {
     if (sortColumn === "amount") {
       return (parseFloat(a.amount) - parseFloat(b.amount)) * modifier;
     }
-    if (sortColumn === "date") {
-      return (new Date(a.date) - new Date(b.date)) * modifier;
+    if (sortColumn === "dispatchDate") {
+      return (new Date(a.dispatchDate) - new Date(b.dispatchDate)) * modifier;
     }
     return aVal && bVal ? aVal.localeCompare(bVal) * modifier : 0;
   });
@@ -46,7 +46,7 @@ function PurchaseOrderTable({ orders, onRemoveOrder, onShowDetails }) {
         className="w-full border-collapse min-w-[800px]"
       >
         <caption className="absolute left-[-9999px]">
-          List of purchase orders showing supplier, order details, and actions
+          List of purchase orders showing buyer, order details, and actions
         </caption>
         <thead>
           <tr className="bg-red-600 text-white">
@@ -59,16 +59,16 @@ function PurchaseOrderTable({ orders, onRemoveOrder, onShowDetails }) {
               className={thClass}
             />
             <OrderTableHeader
-              column="supplierName"
-              label="Supplier Name"
+              column="buyerName"
+              label="Buyer Name"
               currentSort={sortColumn}
               direction={sortDirection}
               onSort={sortTable}
               className={thClass}
             />
             <OrderTableHeader
-              column="date"
-              label="Date"
+              column="dispatchDate"
+              label="Dispatch Date"
               currentSort={sortColumn}
               direction={sortDirection}
               onSort={sortTable}
@@ -99,7 +99,7 @@ function PurchaseOrderTable({ orders, onRemoveOrder, onShowDetails }) {
           {sortedOrders.length === 0 || sortedOrders.filter((_, idx) => idx !== 0).length === 0 ? (
             <tr>
               <td colSpan={6} className="px-4 py-8 text-center text-zinc-500">
-                Chưa có đơn mua nào, hãy thêm đơn mua
+                Chưa có đơn bán nào, hãy thêm đơn bán
               </td>
             </tr>
           ) : (
@@ -110,8 +110,8 @@ function PurchaseOrderTable({ orders, onRemoveOrder, onShowDetails }) {
                   key={order.orderID}
                 >
                   <td className={tdClass}>{order.orderID}</td>
-                  <td className={tdClass}>{order.supplierName}</td>
-                  <td className={tdClass}>{order.date}</td>
+                  <td className={tdClass}>{order.buyerName}</td>
+                  <td className={tdClass}>{order.dispatchDate}</td>
                   <td className={tdClass}>{order.notes}</td>
                   <td className={tdRightClass}>
                     <span>

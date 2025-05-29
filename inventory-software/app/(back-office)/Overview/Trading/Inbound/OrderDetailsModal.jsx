@@ -27,12 +27,11 @@ function OrderDetailsModal({ order, onClose }) {
                     Order Details
                 </h2>
                 <div className="flex flex-col gap-2">
-                    <div><strong>Supplier ID:</strong> {order.supplierID}</div>
-                    <div><strong>Order ID:</strong> {order.orderID}</div>
-                    <div><strong>Date:</strong> {order.date}</div>
-                    <div><strong>Employee ID:</strong> {order.employeeID}</div>
-                    <div><strong>Notes:</strong> {order.notes}</div>
-                    <div><strong>Amount:</strong> {order.amount}</div>
+                    <div><span className="font-semibold">Order ID:</span> {order.orderID}</div>
+                    <div><span className="font-semibold">Supplier Name:</span> {order.supplierName}</div>
+                    <div><span className="font-semibold">Date:</span> {order.date}</div>
+                    <div><span className="font-semibold">Notes:</span> {order.notes}</div>
+                    <div><span className="font-semibold">Amount:</span> ${parseFloat(order.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
                 </div>
                 {items.length > 0 && (
                     <div className="mt-4">
@@ -46,6 +45,7 @@ function OrderDetailsModal({ order, onClose }) {
                                     <th className="p-2 border">Name</th>
                                     <th className="p-2 border">Unit Price</th>
                                     <th className="p-2 border">Category</th>
+                                    <th className="p-2 border">Number</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -57,6 +57,7 @@ function OrderDetailsModal({ order, onClose }) {
                                         <td className="p-2 border">{item.name}</td>
                                         <td className="p-2 border">{item.unitPrice}</td>
                                         <td className="p-2 border">{item.category}</td>
+                                        <td className="p-2 border">{item.number}</td>
                                     </tr>
                                 ))}
                             </tbody>

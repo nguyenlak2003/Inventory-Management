@@ -5,12 +5,12 @@
     "\\inventory-software\\app",
     "\\inventory-software\\app\\(back-office)",
     "\\inventory-software\\app\\(back-office)\\Overview",
+    "\\inventory-software\\app\\(back-office)\\Overview\\Dashboard",
     "\\inventory-software\\app\\(back-office)\\Overview\\Trading",
-    "\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Customers",
     "\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Inbound",
     "\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Outbound",
     "\\inventory-software\\components"
   ],
-  "SelectedNode": "\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Customers",
+  "SelectedNode": "\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Inbound\\PurchaseOrderTable.jsx",
   "PreviewInSolutionExplorer": false
 }
