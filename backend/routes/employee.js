@@ -175,4 +175,30 @@ router.get('/next-code', async (req, res) => {
     }
 })
 
+router.get('/check-username/:username', async (req, res) => {
+    const { username } = req.params;
+    const { excludeEmployeeID } = req.query; // Tùy chọn: ví dụ EMP001
+    //console.log(username);
+
+    try {
+        const pool = await poolPromise;
+        let query = `SELECT COUNT(*) as count FROM Employee WHERE username = @username COLLATE Latin1_General_CS_AS`; // Thêm COLLATE để phân biệt chữ hoa/thường
+        const request = pool.request().input('username', sql.VarChar, username);
+
+        if (excludeEmployeeID) {
+            query += ` AND EmployeeID != @excludeEmployeeID`;
+            request.input('excludeEmployeeID', sql.VarChar, excludeEmployeeID);
+        }
+
+        const result = await request.query(query);
+        const exists = result.recordset[0].count > 0;
+        //console.log(`Username ${username} exists:`, exists);
+        res.json({ exists }); // Trả về { exists: true } nếu tồn tại, ngược lại { exists: false }
+
+    } catch (err) {
+        console.error('Lỗi khi kiểm tra username:', err.message);
+        res.status(500).json({ message: 'Lỗi server khi kiểm tra username.' });
+    }
+});
+
 module.exports = router;

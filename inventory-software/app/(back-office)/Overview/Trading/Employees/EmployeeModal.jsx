@@ -11,6 +11,7 @@ function EmployeeModal({
     onClose,
     onSave,
     onKeyDown,
+    onUsernameCheck
 }) {
 
    if (!isOpen) return null;
@@ -55,6 +56,7 @@ function EmployeeModal({
                             onSave={onSave} // onSave này từ EmployeeManagement
                             onCancel={onClose} // Cho nút Cancel nội bộ của EditItemModalComponent
                             isAddingNew={isAddingNew} // Để EditItemModal biết là đang thêm mới hay không
+                            onUsernameCheck={onUsernameCheck}
                         />
                     ) : (
                         <ItemDetails selectedItem={selectedItem} /> // Đổi tên cho rõ ràng

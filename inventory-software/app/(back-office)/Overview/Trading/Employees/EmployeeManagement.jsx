@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import EmployeeTable from "./EmployeeTable";
 import EmployeeModal from "./EmployeeModal";
 import { useRouter } from 'next/navigation';
@@ -70,6 +70,46 @@ function EmployeeManagement() {
     //console.log(fetchedEmployees);
   }, [apiUrl, router]);
   
+   const checkUsernameAvailability = useCallback(async (username, excludeEmployeeID = null) => {
+    if (!username || !username.trim()) { // Không kiểm tra nếu username trống hoặc chỉ có khoảng trắng
+        return { available: true, message: "" };
+    }
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+        setError("Phiên đăng nhập hết hạn hoặc không hợp lệ. Vui lòng đăng nhập lại.");
+        return { available: false, message: "Lỗi xác thực người dùng." };
+    }
+
+    try {
+        // Mã hóa username để đảm bảo các ký tự đặc biệt được truyền đúng qua URL
+        let url = `${apiUrl}/api/employees/check-username/${encodeURIComponent(username)}`;
+        if (excludeEmployeeID) {
+            url += `?excludeEmployeeID=${encodeURIComponent(excludeEmployeeID)}`;
+        }
+
+        const response = await fetch(url, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ message: "Không thể đọc phản hồi lỗi từ server." }));
+            console.error("Lỗi khi kiểm tra username:", errorData.message);
+            return { available: false, message: errorData.message || "Không thể kiểm tra username lúc này." };
+        }
+        const data = await response.json(); // Mong đợi { exists: true/false }
+        
+        if (data.exists) {
+            return { available: false, message: "Username này đã được sử dụng." };
+        }
+        return { available: true, message: "Username có thể sử dụng." }; // Có thể thêm thông báo thành công
+    } catch (error) {
+        console.error('Lỗi gọi API kiểm tra username:', error);
+        return { available: false, message: "Lỗi kết nối khi kiểm tra username." };
+    }
+  }, [apiUrl]); 
 
   const openDetailsModal = (item) => {
     setLastFocusedElement(document.activeElement);
@@ -291,6 +331,7 @@ function EmployeeManagement() {
           isEditing={isEditing}
           onClose={closeModal}
           onSave={saveItem} 
+          onUsernameCheck={checkUsernameAvailability}
         />
       )}
     </section>
