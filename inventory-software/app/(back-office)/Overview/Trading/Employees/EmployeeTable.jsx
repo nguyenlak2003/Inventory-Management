@@ -2,37 +2,22 @@ import React, { useState } from "react";
 import ActionButton from "./ActionButton";
 import EditItemModal from "./EditItemModal";
 
-function InventoryTable({
-   inventory,
-   onOpenDetails,
-   onRemoveItem,
-   isModalOpen,
-   onUpdateItem, // new prop for updating
+function EmployeeTable({
+  employees,
+  onOpenDetails,
+  onEditItem,
+  onRemoveItem,
 }) {
-   const [editModalOpen, setEditModalOpen] = useState(false);
-   const [editItem, setEditItem] = useState(null);
 
-   function handleEdit(item) {
-       setEditItem(item);
-       setEditModalOpen(true);
-   }
-
-   function handleSave(updatedItem) {
-       onUpdateItem(updatedItem);
-       setEditModalOpen(false);
-       setEditItem(null);
-   }
-
-   function handleClose() {
-       setEditModalOpen(false);
-       setEditItem(null);
-   }
+    if (!employees || employees.length === 0) {
+        return <div className="p-10 text-base text-center text-zinc-600">Không có khách hàng nào để hiển thị.</div>;
+    }
 
    return (
        <div className="overflow-auto rounded-lg bg-[white] shadow-[0_2px_4px_rgba(0,0,0,0.1)]">
            <table
                role="table"
-               aria-label="Inventory Items"
+               aria-label="Employee Items"
                className="w-full border-separate border-spacing-0 max-sm:text-sm border border-gray-300"
            >
                <thead>
@@ -55,48 +40,38 @@ function InventoryTable({
                    </tr>
                </thead>
                <tbody>
-                   {inventory?.map((item) => (
+                   {employees?.map((item) => (
                        <TableRow
-                           key={item.id}
-                           item={item}
-                           onOpenDetails={onOpenDetails}
-                           onEditItem={handleEdit}
-                           onRemoveItem={onRemoveItem}
-                           isModalOpen={isModalOpen}
+                           key={item.code}
+                            item={item}
+                            onOpenDetails={onOpenDetails}
+                            onEditItem={onEditItem}
+                            onRemoveItem={onRemoveItem}
                        />
                    ))}
                </tbody>
            </table>
-           <EditItemModal
-               isOpen={editModalOpen}
-               item={editItem}
-               onSave={handleSave}
-               onClose={handleClose}
-           />
        </div>
    );
 }
 
 function TableRow({
-   item,
-   onOpenDetails,
-   onEditItem,
-   onRemoveItem,
-   isModalOpen,
+    item,
+    onOpenDetails,
+    onEditItem,
+    onRemoveItem,
 }) {
    return (
        <tr className="border-b border-solid border-b-zinc-100 text-black">
            <td className="px-6 py-5 text-base border border-gray-300">{item.code}</td>
            <td className="p-4 border border-gray-300">{item.name}</td>
-           <td className="p-4 border border-gray-300">{item.quantity}</td>
+           <td className="p-4 border border-gray-300">{item.dob ? new Date(item.dob).toLocaleDateString("vi-VN") : ""}</td>
            <td className="p-4 border border-gray-300">{item.gender}</td>
            <td className="px-3 py-5 text-center border border-gray-300">
                <div className="flex gap-2.5 justify-center">
                    <ActionButton
                        variant="primary"
                        onClick={() => onOpenDetails(item)}
-                       aria-controls="details-modal"
-                       aria-expanded={isModalOpen}
                        className="min-w-[100px]"
                    >
                        Details
@@ -104,7 +79,7 @@ function TableRow({
                    <ActionButton variant="secondary" onClick={() => onEditItem(item)}>
                        Edit
                    </ActionButton>
-                   <ActionButton variant="danger" onClick={() => onRemoveItem(item.id)}>
+                   <ActionButton variant="danger" onClick={() => onRemoveItem(item.code)}>
                        Remove
                    </ActionButton>
                </div>
@@ -113,4 +88,4 @@ function TableRow({
    );
 }
 
-export default InventoryTable;
+export default EmployeeTable;

@@ -157,12 +157,12 @@ router.put('/items/:productID', async (req, res) => {
                     CategoryName,
                     SupplierName,
                     COALESCE(SUM(Quantity), 0) AS Quantity,
-                    IsActive
+                    Products.IsActive
                 FROM Products
                 JOIN ProductCategories ON Products.CategoryID  = ProductCategories.CategoryID
                 LEFT JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID
                 LEFT JOIN Inventory ON Products.ProductID = Inventory.ProductID
-                WHERE Products.ProductID  = @ProductID AND IsActive = 1
+                WHERE Products.ProductID  = @ProductID AND Products.IsActive = 1
                 GROUP BY
                     Products.ProductID, 
                     ProductName, 
@@ -172,7 +172,7 @@ router.put('/items/:productID', async (req, res) => {
                     SellingPrice,
                     CategoryName,
                     SupplierName, 
-                    IsActive
+                    Products.IsActive
             `);
 
         if (updatedProductResult.recordset.length > 0) {

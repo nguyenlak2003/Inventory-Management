@@ -37,7 +37,7 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign(
       {username: user.username, role: user.Role},
       JWT_SECRET,
-      {expiresIn: '1h'}
+      {expiresIn: '5h'}
     );
     
     res.json({ message: 'Đăng nhập thành công', token, user: { username: user.username } });
