@@ -2,21 +2,25 @@ USE inventory;
 GO
 
 CREATE TABLE Employee (
-    Username VARCHAR(50) PRIMARY KEY,
-    Password VARCHAR(100),
-    Role VARCHAR(50),
+    username VARCHAR(20) PRIMARY KEY,
+    password VARCHAR(100),
+    Role VARCHAR(50) DEFAULT 'User',
+    EmployeeID VARCHAR(50),
+    IsActive BIT DEFAULT 1,
+    CONSTRAINT FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
 );
 GO
 
 --1. NhaCungCap (Suppliers) - Manual Primary Key Input
 CREATE TABLE Suppliers (
-    SupplierID VARCHAR(50) PRIMARY KEY,
+    SupplierID VARCHAR(50) PRIMARY KEY, 
     SupplierName NVARCHAR(255),
     Addr NVARCHAR(255),
     PhoneNumber VARCHAR(20),
-    Email VARCHAR(255)
+    Email VARCHAR(255),
+    IsActive BIT DEFAULT 1
 );
-GO
+GO  
 
 --2. Loại Sản Phẩm (Product Categories) - Manual Primary Key Input
 CREATE TABLE ProductCategories (
@@ -39,13 +43,14 @@ CREATE TABLE Customers (
     CustomerName NVARCHAR(255),
     Addr NVARCHAR(255),
     Email VARCHAR(255),
-    PhoneNumber VARCHAR(20)
+    PhoneNumber VARCHAR(20),
+    IsActive BIT DEFAULT 1
 );
 GO
 
 --5. Nhân Viên (Employees) - Auto-generated Primary Key
 CREATE TABLE Employees (
-    EmployeeID VARCHAR(50) PRIMARY KEY DEFAULT (CONVERT(VARCHAR(50), NEWID())), -- Auto-generated if not provided
+    EmployeeID VARCHAR(50) PRIMARY KEY, -- Auto-generated if not provided
     EmployeeName NVARCHAR(255),
     DateOfBirth DATE,
     Gender NVARCHAR(10),
@@ -79,6 +84,7 @@ CREATE TABLE InboundOrders (
     DateOfReceipt DATETIME,
     TotalAmount DECIMAL(18, 2),
     Notes NVARCHAR(MAX),
+    IsActive BIT DEFAULT 1, 
     FOREIGN KEY (SupplierID) REFERENCES Suppliers(SupplierID),
     FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
 );
@@ -92,6 +98,7 @@ CREATE TABLE OutboundOrders (
     DispatchDate DATETIME,
     TotalAmount DECIMAL(18, 2),
     Notes NVARCHAR(MAX),
+    IsActive BIT DEFAULT 1, 
     FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
     FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
 );
