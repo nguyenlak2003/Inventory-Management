@@ -6,6 +6,7 @@ const { authenticateToken } = require('../tools/authMiddleware');
 router.use(authenticateToken);
 
 router.get('/', async (req, res) => {
+    console.log("GET /api/supplier called");
     try {
         const pool = await poolPromise;
         const result = await pool.request()

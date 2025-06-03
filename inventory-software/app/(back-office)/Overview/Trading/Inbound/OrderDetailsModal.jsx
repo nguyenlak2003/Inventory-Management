@@ -1,15 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const PAGE_SIZE = 10;
 
 function OrderDetailsModal({ order, onClose }) {
     const [page, setPage] = useState(1);
+    const [items, setItems] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        if (!order) {
+            setItems([]);
+            setPage(1);
+            setError(null);
+            return;
+        }
+
+        const fetchOrderDetails = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_URL}/api/inbound-details/${order.orderID}`,
+                    {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    }
+                );
+                if (!response.ok) {
+                    throw new Error("Failed to fetch order details");
+                }
+                const data = await response.json();
+                setItems(data);
+            } catch (err) {
+                setError("Failed to load order details.");
+                setItems([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchOrderDetails();
+    }, [order]);
 
     if (!order) return null;
 
-    const items = order.items || [];
     const totalPages = Math.ceil(items.length / PAGE_SIZE);
-
     const pagedItems = items.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
     const handlePrev = () => setPage((p) => Math.max(1, p - 1));
@@ -23,41 +59,41 @@ function OrderDetailsModal({ order, onClose }) {
             className="flex fixed inset-0 justify-center items-center bg-black bg-opacity-50 z-[1000]"
         >
             <div className="p-6 rounded-lg bg-white max-w-[700px] w-[95%]">
-                <h2 id="modal-title" className="mb-5 text-red-600">
+                <h2 id="modal-title" className="mb-5 text-red-700">
                     Order Details
                 </h2>
                 <div className="flex flex-col gap-2">
                     <div><span className="font-semibold">Order ID:</span> {order.orderID}</div>
-                    <div><span className="font-semibold">Supplier Name:</span> {order.supplierName}</div>
-                    <div><span className="font-semibold">Date:</span> {order.date}</div>
+                    <div><span className="font-semibold">SupplierID:</span> {order.supplierName}</div>
+                    <div><span className="font-semibold">Dispatch Date:</span> {order.date}</div>
                     <div><span className="font-semibold">Notes:</span> {order.notes}</div>
                     <div><span className="font-semibold">Amount:</span> ${parseFloat(order.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
                 </div>
-                {items.length > 0 && (
+                {loading && <div className="mt-4 text-center text-gray-500">Loading order items...</div>}
+                {error && <div className="mt-4 text-center text-red-700">{error}</div>}
+                {!loading && !error && items.length > 0 && (
                     <div className="mt-4">
-                        <h3 className="text-red-600 mb-2">Order Items</h3>
+                        <h3 className="text-red-700 mb-2">Order Items</h3>
                         <table className="w-full border border-zinc-300 mb-4">
                             <thead>
                                 <tr className="bg-zinc-100">
                                     <th className="p-2 border">#</th>
                                     <th className="p-2 border">Product ID</th>
                                     <th className="p-2 border">Warehouse ID</th>
-                                    <th className="p-2 border">Name</th>
+                                    <th className="p-2 border">Quantity Received</th>
                                     <th className="p-2 border">Unit Price</th>
-                                    <th className="p-2 border">Category</th>
-                                    <th className="p-2 border">Number</th>
+                                    <th className="p-2 border">Line Total</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {pagedItems.map((item, idx) => (
-                                    <tr key={idx + (page - 1) * PAGE_SIZE}>
+                                    <tr key={item.InboundDetailID || idx + (page - 1) * PAGE_SIZE}>
                                         <td className="p-2 border text-center">{(page - 1) * PAGE_SIZE + idx + 1}</td>
-                                        <td className="p-2 border">{item.productID}</td>
-                                        <td className="p-2 border">{item.warehouseID}</td>
-                                        <td className="p-2 border">{item.name}</td>
-                                        <td className="p-2 border">{item.unitPrice}</td>
-                                        <td className="p-2 border">{item.category}</td>
-                                        <td className="p-2 border">{item.number}</td>
+                                        <td className="p-2 border">{item.ProductID}</td>
+                                        <td className="p-2 border">{item.WarehouseID}</td>
+                                        <td className="p-2 border">{item.QuantityReceived}</td>
+                                        <td className="p-2 border">{item.UnitPrice}</td>
+                                        <td className="p-2 border">{item.LineTotal}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -87,7 +123,7 @@ function OrderDetailsModal({ order, onClose }) {
                 )}
                 <div className="flex justify-end mt-4">
                     <button
-                        className="px-4 py-2 text-red-600 rounded border border-red-600 border-solid cursor-pointer bg-white"
+                        className="px-4 py-2 text-red-700 rounded border border-red-700 border-solid cursor-pointer bg-white"
                         onClick={onClose}
                     >
                         Close

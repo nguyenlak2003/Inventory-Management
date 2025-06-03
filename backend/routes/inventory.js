@@ -230,7 +230,31 @@ router.get('/next-code/:categoryID', async (req, res) => {
         res.status(500).json({ message: 'Lỗi server khi tạo mã sản phẩm.' });
     }
 })
+router.get('/category-summary', async (req, res) => {
+    try {
+        const pool = await poolPromise;
+        const categories = ['electronics', 'houseware', 'misc'];
+        const results = {};
 
+        for (const category of categories) {
+            const result = await pool.request()
+                .input('CategoryName', sql.NVarChar, category)
+                .query(`
+                    SELECT COALESCE(SUM(Inventory.Quantity), 0) AS TotalQuantity
+                    FROM Products
+                    JOIN ProductCategories ON Products.CategoryID = ProductCategories.CategoryID
+                    LEFT JOIN Inventory ON Products.ProductID = Inventory.ProductID
+                    WHERE ProductCategories.CategoryName = @CategoryName AND Products.IsActive = 1
+                `);
+            results[category] = result.recordset[0].TotalQuantity;
+        }
+
+        res.json(results);
+    } catch (err) {
+        console.error('Error fetching category summary:', err.message);
+        res.status(500).json({ message: 'Server error fetching category summary.' });
+    }
+});
 router.get('/check-productid/:productID', async (req, res) => {
     const { productID } = req.params;
 

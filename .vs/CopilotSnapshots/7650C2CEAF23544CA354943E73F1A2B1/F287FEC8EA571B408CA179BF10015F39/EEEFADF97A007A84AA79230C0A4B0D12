@@ -1,0 +1,68 @@
+﻿// ...existing code...
+const express = require('express');
+const router = express.Router();
+const sql = require('mssql');
+
+// Optional: Auth middleware (implement or import as needed)
+// const authenticate = require('../middleware/authenticate');
+
+// GET /api/inbound - Fetch all active inbound orders
+router.get('/', /*authenticate,*/ async (req, res) => {
+  try {
+    const pool = await sql.connect();
+    const result = await pool.request()
+      .query(`SELECT InboundOrderID, SupplierID, EmployeeID, DateOfReceipt, TotalAmount, Notes
+              FROM InboundOrders WHERE IsActive = 1`);
+    res.json(result.recordset);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching inbound orders.', error: err.message });
+  }
+});
+
+// POST /api/inbound - Add a new inbound order
+router.post('/', /*authenticate,*/ async (req, res) => {
+  const { InboundOrderID, SupplierID, EmployeeID, DateOfReceipt, TotalAmount, Notes } = req.body;
+  try {
+    const pool = await sql.connect();
+    const request = pool.request()
+      .input('InboundOrderID', sql.VarChar(50), InboundOrderID || undefined)
+      .input('SupplierID', sql.VarChar(50), SupplierID)
+      .input('EmployeeID', sql.VarChar(50), EmployeeID)
+      .input('DateOfReceipt', sql.DateTime, DateOfReceipt)
+      .input('TotalAmount', sql.Decimal(18, 2), TotalAmount)
+      .input('Notes', sql.NVarChar(sql.MAX), Notes)
+      .input('IsActive', sql.Bit, 1);
+
+    const query = `
+      INSERT INTO InboundOrders (InboundOrderID, SupplierID, EmployeeID, DateOfReceipt, TotalAmount, Notes, IsActive)
+      VALUES (
+        ISNULL(@InboundOrderID, CONVERT(VARCHAR(50), NEWID())),
+        @SupplierID, @EmployeeID, @DateOfReceipt, @TotalAmount, @Notes, @IsActive
+      )
+    `;
+    await request.query(query);
+    res.status(201).json({ message: 'Inbound order added successfully.' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error adding inbound order.', error: err.message });
+  }
+});
+
+// PUT /api/inbound/:orderID/deActive - Mark an order as inactive (soft delete)
+router.put('/:orderID/deActive', /*authenticate,*/ async (req, res) => {
+  const { orderID } = req.params;
+  try {
+    const pool = await sql.connect();
+    const result = await pool.request()
+      .input('InboundOrderID', sql.VarChar(50), orderID)
+      .query('UPDATE InboundOrders SET IsActive = 0 WHERE InboundOrderID = @InboundOrderID');
+    if (result.rowsAffected[0] === 0) {
+      return res.status(404).json({ message: 'Order not found.' });
+    }
+    res.json({ message: 'Order deactivated successfully.' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error deactivating order.', error: err.message });
+  }
+});
+
+module.exports = router;
+// ...existing code...

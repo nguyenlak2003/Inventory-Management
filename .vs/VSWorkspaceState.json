@@ -1,16 +1,16 @@
 {
   "ExpandedNodes": [
     "",
+    "\\backend",
     "\\inventory-software",
     "\\inventory-software\\app",
     "\\inventory-software\\app\\(back-office)",
     "\\inventory-software\\app\\(back-office)\\Overview",
     "\\inventory-software\\app\\(back-office)\\Overview\\Dashboard",
-    "\\inventory-software\\app\\(back-office)\\Overview\\Trading",
-    "\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Inbound",
-    "\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Outbound",
+    "\\inventory-software\\app\\(back-office)\\Overview\\Security",
+    "\\inventory-software\\app\\login",
     "\\inventory-software\\components"
   ],
-  "SelectedNode": "\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Inbound\\PurchaseOrderTable.jsx",
+  "SelectedNode": "\\inventory-software\\components",
   "PreviewInSolutionExplorer": false
 }

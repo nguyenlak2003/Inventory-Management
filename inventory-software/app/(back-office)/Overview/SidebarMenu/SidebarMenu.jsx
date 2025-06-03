@@ -42,24 +42,24 @@ export default function SidebarMenu() {
         >
             <ul>
                 <li>
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-                        <path d="M120-120q-33 0-56.5-23.5T40-200v-480q0-33 23.5-56.5T120-760h480q33 0 56.5 23.5T680-680v240h80q17 0 32 6.5t26 18.5l96 96q11 11 17.5 26t6.5 32v120q0 33-23.5 56.5T840-120q-33 0-56.5-23.5T760-200v-40H680v40q0 33-23.5 56.5T600-120H120Zm0-80h480v-480H120v480Zm560-80h80v-120l-80-80v200ZM200-320h240q17 0 28.5-11.5T480-360q0-17-11.5-28.5T440-400H200q-17 0-28.5 11.5T160-360q0 17 11.5 28.5T200-320Zm0-120h240q17 0 28.5-11.5T480-480q0-17-11.5-28.5T440-520H200q-17 0-28.5 11.5T160-480q0 17 11.5 28.5T200-440ZM120-680v480-480Z" />
-                    </svg>
-                    <span className="logo">InventoryPro</span>
-                                       
-                   
-                    <button
-                        onClick={toggleSidebar}
-                        id="toggle-btn"
-                        className={sidebarClosed ? "rotate" : ""}
-                        aria-label="Toggle sidebar"
-                        type="button"
-                    >
-                        {/* SVG icon */}
-                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-                            <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z" />
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" style={{ marginRight: '8px', fill: 'red' }}>
+                            <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.16 14.26l.03-.12L7.9 12h8.45c.75 0 1.41-.41 1.75-1.03l3.24-5.88A1 1 0 0 0 20.45 4H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.44C4.52 15.37 5.48 17 7 17h12v-2H7.42c-.14 0-.25-.11-.26-.25zM6.16 6h12.31l-2.76 5H8.53L6.16 6z" />
                         </svg>
-                    </button>
+                        <span className="logo" style={{ color: 'red', fontWeight: 'bold', fontSize: '1.2em' }}>InventoryPro</span>
+                        <button
+                            onClick={toggleSidebar}
+                            id="toggle-btn"
+                            className={sidebarClosed ? "rotate" : ""}
+                            aria-label="Toggle sidebar"
+                            type="button"
+                        >
+                            {/* SVG icon */}
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="red">
+                                <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z" />
+                            </svg>
+                        </button>
+                    </div>
                 </li>
                 <li className="active">
                     <Link href="/Overview">
@@ -90,7 +90,7 @@ export default function SidebarMenu() {
                             {/* SVG icon */}
                             {idx === 0 ? (
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-                                    <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h207q16 0 30.5 6t25.5 17l57 57h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Zm400-160v40q0 17 11.5 28.5T600-320q17 0 28.5-11.5T640-360v-40h40q17 0 28.5-11.5T720-440q0-17-11.5-28.5T680-480h-40v-40q0-17-11.5-28.5T600-560q-17 0-28.5 11.5T560-520v40h-40q-17 0-28.5 11.5T480-440q0 17 11.5 28.5T520-400h40Z" />
+                                    <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h207q16 0 30.5 6t25.5 17l57 57h320q33 0 56.5 23.5T880-640v400q0 33-23.5-56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Zm400-160v40q0 17 11.5 28.5T600-320q17 0 28.5-11.5T640-360v-40h40q17 0 28.5-11.5T720-440q0-17-11.5-28.5T680-480h-40v-40q0-17-11.5-28.5T600-560q-17 0-28.5 11.5T560-520v40h-40q-17 0-28.5 11.5T480-440q0 17 11.5 28.5T520-400h40Z" />
                                 </svg>
                             ) : (
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
@@ -118,13 +118,13 @@ export default function SidebarMenu() {
                     </li>
                 ))}
                 <li>
-                    <a href="calendar.html">
+                    <Link href='/Overview/Security'>
                         {/* SVG icon */}
-                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-                            <path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-40q0-17 11.5-28.5T280-880q17 0 28.5 11.5T320-840v40h320v-40q0-17 11.5-28.5T680-880q17 0 28.5 11.5T720-840v40h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Zm280 240q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm-160 0q-17 0-28.5-11.5T280-440q0-17 11.5-28.5T320-480q17 0 28.5 11.5T360-440q0 17-11.5 28.5T320-400Zm320 0q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM480-240q-17 0-28.5-11.5T440-280q0-17 11.5-28.5T480-320q17 0 28.5 11.5T520-280q0 17-11.5 28.5T480-240Zm-160 0q-17 0-28.5-11.5T280-280q0-17 11.5-28.5T320-320q17 0 28.5 11.5T360-280q0 17-11.5 28.5T320-240Zm320 0q-17 0-28.5-11.5T600-280q0-17 11.5-28.5T640-320q17 0 28.5 11.5T680-280q0 17-11.5 28.5T640-240Z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#e8eaed">
+                            <path d="M12 2L4 5v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V5l-8-3zm0 2.18l6 2.25V11c0 4.42-2.94 8.36-6 9.74C8.94 19.36 6 15.42 6 11V6.43l6-2.25z" />
                         </svg>
-                        <span>Calendar</span>
-                    </a>
+                        <span>Security</span>
+                    </Link>
                 </li>
                 <li>
                     <Link href='/Overview/Profile'>

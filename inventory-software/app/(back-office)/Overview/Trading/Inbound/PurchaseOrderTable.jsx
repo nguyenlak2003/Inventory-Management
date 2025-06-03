@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import OrderTableHeader from "./OrderTableHeader";
 
 function PurchaseOrderTable({ orders, onRemoveOrder, onShowDetails }) {
+    console.log("orders passed to table:", orders);
+ 
   const [sortColumn, setSortColumn] = useState("date");
   const [sortDirection, setSortDirection] = useState("desc");
 
@@ -49,7 +51,7 @@ function PurchaseOrderTable({ orders, onRemoveOrder, onShowDetails }) {
           List of purchase orders showing supplier, order details, and actions
         </caption>
         <thead>
-          <tr className="bg-red-600 text-white">
+          <tr className="bg-red-700 text-white">
             <OrderTableHeader
               column="orderID"
               label="Order ID"
@@ -96,49 +98,44 @@ function PurchaseOrderTable({ orders, onRemoveOrder, onShowDetails }) {
           </tr>
         </thead>
         <tbody>
-          {sortedOrders.length === 0 || sortedOrders.filter((_, idx) => idx !== 0).length === 0 ? (
+          {sortedOrders.length === 0 ? (
             <tr>
               <td colSpan={6} className="px-4 py-8 text-center text-zinc-500">
                 Chưa có đơn mua nào, hãy thêm đơn mua
               </td>
             </tr>
           ) : (
-            sortedOrders.map((order, idx) =>
-              idx === 0 ? null : (
-                <tr
-                  className="border-b border-solid border-b-zinc-100"
-                  key={order.orderID}
-                >
-                  <td className={tdClass}>{order.orderID}</td>
-                  <td className={tdClass}>{order.supplierName}</td>
-                  <td className={tdClass}>{order.date}</td>
-                  <td className={tdClass}>{order.notes}</td>
-                  <td className={tdRightClass}>
-                    <span>
-                      ${parseFloat(order.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                    </span>
-                  </td>
-                  <td className={tdCenterClass}>
-                    <div className="flex gap-2 justify-center">
-                      <button
-                        className="px-4 py-2 text-sm bg-red-600 rounded cursor-pointer border-[none] text-white"
-                        aria-label={`View details for order ${order.orderID}`}
-                        onClick={() => onShowDetails(order)}
-                      >
-                        Order Details
-                      </button>
-                      <button
-                        className="px-4 py-2 text-sm text-red-600 bg-white rounded border border-red-600 border-solid cursor-pointer"
-                        aria-label={`Remove order ${order.orderID}`}
-                        onClick={() => onRemoveOrder(order.orderID)}
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              )
-            )
+            sortedOrders.map((order) => (
+              <tr key={order.orderID}>
+                <td className={tdClass}>{order.orderID}</td>
+                <td className={tdClass}>{order.supplierName}</td>
+                <td className={tdClass}>{order.date}</td>
+                <td className={tdClass}>{order.notes}</td>
+                <td className={tdRightClass}>
+                  <span>
+                    ${parseFloat(order.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </span>
+                </td>
+                <td className={tdCenterClass}>
+                  <div className="flex gap-2 justify-center">
+                    <button
+                      className="px-4 py-2 text-sm bg-red-700 rounded cursor-pointer border-[none] text-white"
+                      aria-label={`View details for order ${order.orderID}`}
+                      onClick={() => onShowDetails(order)}
+                    >
+                      Order Details
+                    </button>
+                    <button
+                      className="px-4 py-2 text-sm text-red-700 bg-white rounded border border-red-700 border-solid cursor-pointer"
+                      aria-label={`Remove order ${order.orderID}`}
+                      onClick={() => onRemoveOrder(order.orderID)}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))
           )}
         </tbody>
       </table>
