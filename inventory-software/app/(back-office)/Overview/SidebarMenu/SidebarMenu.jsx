@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 import React, { useState } from "react";
 import "./style.css"; // Adjust the path if needed
 import Link from 'next/link';
@@ -123,7 +123,7 @@ export default function SidebarMenu() {
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#e8eaed">
                             <path d="M12 2L4 5v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V5l-8-3zm0 2.18l6 2.25V11c0 4.42-2.94 8.36-6 9.74C8.94 19.36 6 15.42 6 11V6.43l6-2.25z" />
                         </svg>
-                        <span>Security</span>
+                        <span>Security (WIP)</span>
                     </Link>
                 </li>
                 <li>

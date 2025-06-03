@@ -180,6 +180,22 @@ function CustomerManagement() {
       return false;
     }
 
+    // Email validation: must match SQL LIKE '%_@__%.__%'
+    const email = itemDataFromForm.email;
+    const emailRegex = /^[^@]+@[^@]{2,}\.[^@]{2,}$/;
+    if (!emailRegex.test(email)) {
+      alert('Email không hợp lệ. Vui lòng nhập đúng định dạng email.');
+      return false;
+    }
+
+    // Phone validation: only digits, length 10 or 11
+    const phone = itemDataFromForm.phone;
+    const phoneRegex = /^\d{10,11}$/;
+    if (!phoneRegex.test(phone)) {
+      alert('Số điện thoại không hợp lệ. Chỉ nhập số, độ dài 10 hoặc 11 chữ số.');
+      return false;
+    }
+
     const customerID = itemDataFromForm.code;
 
     const payload = {

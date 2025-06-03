@@ -1,4 +1,3 @@
-// EditItemModal.jsx (Component EmployeeForm)
 import React, { useState, useEffect, useRef, useCallback } from "react";
 
 function EmployeeForm({ itemToEdit, onSave, onCancel, isAddingNew, onUsernameCheck }) {
@@ -117,6 +116,38 @@ function EmployeeForm({ itemToEdit, onSave, onCancel, isAddingNew, onUsernameChe
         }
     }
     
+    // Date of Birth
+    const dob = form.dob;
+    const dobDate = new Date(dob);
+    const today = new Date();
+    const minDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+    if (!dob || isNaN(dobDate.getTime()) || dobDate > minDate) {
+        alert("Ngày sinh không hợp lệ. Nhân viên phải từ 18 tuổi trở lên.");
+        const fieldElement = document.getElementsByName("dob")[0];
+        if (fieldElement) fieldElement.focus();
+        return;
+    }
+
+    // Email
+    const email = form.email;
+    const emailRegex = /^[^@]+@[^@]{2,}\.[^@]{2,}$/;
+    if (!emailRegex.test(email)) {
+        alert("Email không hợp lệ. Vui lòng nhập đúng định dạng email.");
+        const fieldElement = document.getElementsByName("email")[0];
+        if (fieldElement) fieldElement.focus();
+        return;
+    }
+
+    // Phone
+    const phone = form.phone;
+    const phoneRegex = /^\d{10,11}$/;
+    if (!phoneRegex.test(phone)) {
+        alert("Số điện thoại không hợp lệ. Chỉ nhập số, độ dài 10 hoặc 11 chữ số.");
+        const fieldElement = document.getElementsByName("phone")[0];
+        if (fieldElement) fieldElement.focus();
+        return;
+    }
+
     // Kiểm tra các trường bắt buộc của trang hiện tại trước khi submit (nếu đang ở trang 2)
     // Hoặc kiểm tra tất cả nếu form không phân trang hoặc logic khác
     if (page === 2) {
@@ -143,7 +174,6 @@ function EmployeeForm({ itemToEdit, onSave, onCancel, isAddingNew, onUsernameChe
             }
         }
     }
-
 
     const success = await onSave(form); 
     // EmployeeManagement sẽ đóng modal nếu lưu thành công
@@ -257,9 +287,9 @@ function EmployeeForm({ itemToEdit, onSave, onCancel, isAddingNew, onUsernameChe
                   required
                 >
                   <option value="">-- Chọn giới tính --</option>
-                  <option value="Male">Nam</option>
-                  <option value="Female">Nữ</option>
-                  <option value="Other">Khác</option>
+                  <option value="Nam">Nam</option>
+                  <option value="Nữ">Nữ</option>
+                  <option value="Khác">Khác</option>
                 </select>
               </div>
             </div>

@@ -141,6 +141,7 @@ router.post('/', async (req, res) => {
         
         res.json({ message: 'Thêm nhân viên thành công.' });
     } catch (err) {
+        console.error("Error adding employee:", err);
         res.status(500).json({ message: 'Lỗi server khi thêm nhân viên.' });
     }
 

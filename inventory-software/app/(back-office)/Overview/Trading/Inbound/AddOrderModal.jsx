@@ -15,10 +15,14 @@ function AddOrderModal({ onClose, onAddOrder }) {
     const [orderItems, setOrderItems] = useState([]);
     const [suppliers, setSuppliers] = useState([]);
     const [selectedSupplierID, setSelectedSupplierID] = useState("");
+    const [products, setProducts] = useState([]);
+    const [warehouses, setWarehouses] = useState([]);
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL;
         const token = localStorage.getItem('token');
+        // Fetch suppliers
         fetch(`${apiUrl}/api/suppliers`, {
             headers: { 'Authorization': `Bearer ${token}` }
         })
@@ -31,6 +35,20 @@ function AddOrderModal({ onClose, onAddOrder }) {
                 setSuppliers([]);
                 console.error('Failed to fetch suppliers:', err);
             });
+        // Fetch products
+        fetch(`${apiUrl}/api/products`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+            .then(res => res.ok ? res.json() : [])
+            .then(data => setProducts(data))
+            .catch(() => setProducts([]));
+        // Fetch warehouses
+        fetch(`${apiUrl}/api/warehouses`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+            .then(res => res.ok ? res.json() : [])
+            .then(data => setWarehouses(data))
+            .catch(() => setWarehouses([]));
     }, []);
 
     const totalPages = Math.ceil(Number(newOrder.numberOfItems) / FIELDS_PER_PAGE) || 1;
@@ -64,6 +82,7 @@ function AddOrderModal({ onClose, onAddOrder }) {
         if (id === "numberOfItems" && Number(value) < step - 1) {
             setStep(1);
         }
+        setErrors({});
     };
 
     const handleSupplierChange = (e) => {
@@ -72,6 +91,7 @@ function AddOrderModal({ onClose, onAddOrder }) {
             ...prev,
             supplierName: e.target.value
         }));
+        setErrors({});
     };
 
     const handleItemChange = (idx, field, value) => {
@@ -80,9 +100,70 @@ function AddOrderModal({ onClose, onAddOrder }) {
             updated[idx][field] = value;
             return updated;
         });
+        setErrors({});
+    };
+
+    // Validation helpers
+    const isValidDate = (dateStr) => {
+        if (!dateStr) return false;
+        const d = new Date(dateStr);
+        return !isNaN(d.getTime());
+    };
+
+    const isValidProduct = (productID) => {
+        return products.some(p => p.ProductID === productID);
+    };
+
+    const isValidWarehouse = (warehouseID) => {
+        return warehouses.some(w => w.WarehouseID === warehouseID);
+    };
+
+    const validateForm = () => {
+        const newErrors = {};
+        if (!isValidDate(newOrder.date)) {
+            newErrors.date = "Please enter a valid date.";
+        }
+        if (!newOrder.numberOfItems || Number(newOrder.numberOfItems) <= 0) {
+            newErrors.numberOfItems = "Number of items must be greater than 0.";
+        }
+        orderItems.forEach((item, idx) => {
+            if (!isValidProduct(item.productID)) {
+                newErrors[`productID_${idx}`] = "Invalid Product ID.";
+            }
+            if (!isValidWarehouse(item.warehouseID)) {
+                newErrors[`warehouseID_${idx}`] = "Invalid Warehouse ID.";
+            }
+            if (!item.quantityReceived || Number(item.quantityReceived) <= 0) {
+                newErrors[`quantityReceived_${idx}`] = "Quantity must be greater than 0.";
+            }
+        });
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const validateFirstPage = () => {
+        const newErrors = {};
+        if (!newOrder.orderID || newOrder.orderID.trim() === "") {
+            newErrors.orderID = "Order ID is required.";
+        }
+        if (!newOrder.supplierName || newOrder.supplierName.trim() === "") {
+            newErrors.supplierName = "Supplier is required.";
+        }
+        if (!isValidDate(newOrder.date)) {
+            newErrors.date = "Please enter a valid date.";
+        }
+        if (!newOrder.numberOfItems || Number(newOrder.numberOfItems) <= 0) {
+            newErrors.numberOfItems = "Number of items must be greater than 0.";
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
     const handleSubmit = async () => {
+        if (!validateForm()) {
+            return;
+        }
+
         let dateValue = newOrder.date;
         if (dateValue) {
             dateValue = new Date(dateValue).toISOString();
@@ -113,6 +194,7 @@ function AddOrderModal({ onClose, onAddOrder }) {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
+                    InboundOrderID: newOrder.orderID,
                     SupplierID: payload.SupplierID,
                     DateOfReceipt: payload.DateOfReceipt,
                     TotalAmount: payload.TotalAmount,
@@ -172,6 +254,12 @@ function AddOrderModal({ onClose, onAddOrder }) {
     }, []);
 
     if (step === 1) {
+        const handleNext = () => {
+            if (validateFirstPage()) {
+                setStep(2);
+            }
+        };
+
         return (
             <div
                 role="dialog"
@@ -191,13 +279,13 @@ function AddOrderModal({ onClose, onAddOrder }) {
                             <label htmlFor="orderID">Order ID</label>
                             <input
                                 id="orderID"
-                                className="p-2 rounded border border-solid border-zinc-300 bg-zinc-100 text-zinc-400 cursor-not-allowed select-none"
-                                value="(Auto-generated)"
-                                disabled
-                                tabIndex={-1}
-                                readOnly
-                                aria-readonly="true"
+                                className="p-2 rounded border border-solid border-zinc-300"
+                                value={newOrder.orderID}
+                                onChange={handleInputChange}
+                                placeholder="Enter Order ID"
+                                autoComplete="off"
                             />
+                            {errors.orderID && <span className="text-red-600 text-sm">{errors.orderID}</span>}
                         </div>
                         <div className="flex flex-col gap-1">
                             <label htmlFor="supplierName">Supplier</label>
@@ -215,6 +303,7 @@ function AddOrderModal({ onClose, onAddOrder }) {
                                     </option>
                                 ))}
                             </select>
+                            {errors.supplierName && <span className="text-red-600 text-sm">{errors.supplierName}</span>}
                         </div>
                         <div className="flex flex-col gap-1">
                             <label htmlFor="date">Date</label>
@@ -225,6 +314,7 @@ function AddOrderModal({ onClose, onAddOrder }) {
                                 value={newOrder.date}
                                 onChange={handleInputChange}
                             />
+                            {errors.date && <span className="text-red-600 text-sm">{errors.date}</span>}
                         </div>
                         <div className="flex flex-col gap-1">
                             <label htmlFor="notes">Notes</label>
@@ -245,6 +335,7 @@ function AddOrderModal({ onClose, onAddOrder }) {
                                 value={newOrder.numberOfItems}
                                 onChange={handleInputChange}
                             />
+                            {errors.numberOfItems && <span className="text-red-600 text-sm">{errors.numberOfItems}</span>}
                         </div>
                         <div className="flex gap-2 justify-end mt-4">
                             <button
@@ -257,8 +348,7 @@ function AddOrderModal({ onClose, onAddOrder }) {
                             <button
                                 type="button"
                                 className="px-4 py-2 bg-red-700 rounded cursor-pointer border-[none] text-white"
-                                onClick={() => setStep(2)}
-                                disabled={Number(newOrder.numberOfItems) < 1}
+                                onClick={handleNext}
                             >
                                 Next
                             </button>
@@ -301,29 +391,36 @@ function AddOrderModal({ onClose, onAddOrder }) {
                         </thead>
                         <tbody>
                             {currentItems.map((item, idx) => {
+                                const globalIdx = startIdx + idx;
                                 const quantity = Number(item.quantityReceived) || 0;
                                 const price = Number(item.unitPrice) || 0;
                                 const lineTotal = quantity * price;
                                 return (
-                                    <tr key={startIdx + idx}>
-                                        <td className="p-2 border text-center">{startIdx + idx + 1}</td>
+                                    <tr key={globalIdx}>
+                                        <td className="p-2 border text-center">{globalIdx + 1}</td>
                                         <td className="p-2 border">
                                             <input
                                                 className="w-full p-1 border rounded"
                                                 value={item.productID}
                                                 onChange={(e) =>
-                                                    handleItemChange(startIdx + idx, "productID", e.target.value)
+                                                    handleItemChange(globalIdx, "productID", e.target.value)
                                                 }
                                             />
+                                            {errors[`productID_${globalIdx}`] && (
+                                                <span className="text-red-600 text-xs">{errors[`productID_${globalIdx}`]}</span>
+                                            )}
                                         </td>
                                         <td className="p-2 border">
                                             <input
                                                 className="w-full p-1 border rounded"
                                                 value={item.warehouseID}
                                                 onChange={(e) =>
-                                                    handleItemChange(startIdx + idx, "warehouseID", e.target.value)
+                                                    handleItemChange(globalIdx, "warehouseID", e.target.value)
                                                 }
                                             />
+                                            {errors[`warehouseID_${globalIdx}`] && (
+                                                <span className="text-red-600 text-xs">{errors[`warehouseID_${globalIdx}`]}</span>
+                                            )}
                                         </td>
                                         <td className="p-2 border">
                                             <input
@@ -332,9 +429,12 @@ function AddOrderModal({ onClose, onAddOrder }) {
                                                 min={0}
                                                 value={item.quantityReceived}
                                                 onChange={(e) =>
-                                                    handleItemChange(startIdx + idx, "quantityReceived", e.target.value)
+                                                    handleItemChange(globalIdx, "quantityReceived", e.target.value)
                                                 }
                                             />
+                                            {errors[`quantityReceived_${globalIdx}`] && (
+                                                <span className="text-red-600 text-xs">{errors[`quantityReceived_${globalIdx}`]}</span>
+                                            )}
                                         </td>
                                         <td className="p-2 border">
                                             <input
@@ -343,7 +443,7 @@ function AddOrderModal({ onClose, onAddOrder }) {
                                                 min={0}
                                                 value={item.unitPrice}
                                                 onChange={(e) =>
-                                                    handleItemChange(startIdx + idx, "unitPrice", e.target.value)
+                                                    handleItemChange(globalIdx, "unitPrice", e.target.value)
                                                 }
                                             />
                                         </td>

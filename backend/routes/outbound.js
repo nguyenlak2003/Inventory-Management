@@ -56,10 +56,10 @@ router.post('/', async (req, res) => {
             .input('TotalAmount', sql.Decimal(18, 2), TotalAmount)
             .input('Notes', sql.NVarChar, Notes)
             .query(`
-                INSERT INTO OutboundOrders ( CustomerID, DispatchDate, TotalAmount, Notes)
+                INSERT INTO OutboundOrders (OutboundOrderID, CustomerID, DispatchDate, TotalAmount, Notes)
                 OUTPUT inserted.OutboundOrderID
                 VALUES (
-                   
+                   @OutboundOrderID,
                     @CustomerID, 
                     @DispatchDate, 
                     @TotalAmount, 

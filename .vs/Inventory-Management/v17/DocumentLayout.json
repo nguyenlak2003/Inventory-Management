@@ -3,16 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\San\\source\\repos\\Local2\\Inventory-Management\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\San\\source\\repos\\Local2\\Inventory-Management\\inventory-software\\app\\(back-office)\\Overview\\Dashboard\\ProductDetailsCard.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:inventory-software\\app\\(back-office)\\Overview\\Dashboard\\ProductDetailsCard.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\San\\source\\repos\\Local2\\Inventory-Management\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Outbound\\AddOrderModal.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:inventory-software\\app\\(back-office)\\Overview\\Trading\\Outbound\\AddOrderModal.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\San\\source\\repos\\Local2\\Inventory-Management\\inventory-software\\app\\(back-office)\\Overview\\Dashboard\\InventorySummaryCard.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:inventory-software\\app\\(back-office)\\Overview\\Dashboard\\InventorySummaryCard.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\San\\source\\repos\\Local2\\Inventory-Management\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Inbound\\AddOrderModal.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:inventory-software\\app\\(back-office)\\Overview\\Trading\\Inbound\\AddOrderModal.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\San\\source\\repos\\Local2\\Inventory-Management\\backend\\routes\\inventory.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:backend\\routes\\inventory.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\San\\source\\repos\\Local2\\Inventory-Management\\backend\\routes\\outbound.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:backend\\routes\\outbound.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\San\\source\\repos\\Local2\\Inventory-Management\\backend\\routes\\inbound.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:backend\\routes\\inbound.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 195,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -30,41 +34,52 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "inventory.js",
-              "DocumentMoniker": "C:\\Users\\San\\source\\repos\\Local2\\Inventory-Management\\backend\\routes\\inventory.js",
-              "RelativeDocumentMoniker": "backend\\routes\\inventory.js",
-              "ToolTip": "C:\\Users\\San\\source\\repos\\Local2\\Inventory-Management\\backend\\routes\\inventory.js",
-              "RelativeToolTip": "backend\\routes\\inventory.js",
-              "ViewState": "AgIAANMAAAAAAAAAAAAkwPIAAABQAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "inbound.js",
+              "DocumentMoniker": "C:\\Users\\San\\source\\repos\\Local2\\Inventory-Management\\backend\\routes\\inbound.js",
+              "RelativeDocumentMoniker": "backend\\routes\\inbound.js",
+              "ToolTip": "C:\\Users\\San\\source\\repos\\Local2\\Inventory-Management\\backend\\routes\\inbound.js",
+              "RelativeToolTip": "backend\\routes\\inbound.js",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAAAD0AAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-06-03T03:27:03.389Z",
+              "WhenOpened": "2025-06-03T08:48:26.36Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "outbound.js",
+              "DocumentMoniker": "C:\\Users\\San\\source\\repos\\Local2\\Inventory-Management\\backend\\routes\\outbound.js",
+              "RelativeDocumentMoniker": "backend\\routes\\outbound.js",
+              "ToolTip": "C:\\Users\\San\\source\\repos\\Local2\\Inventory-Management\\backend\\routes\\outbound.js",
+              "RelativeToolTip": "backend\\routes\\outbound.js",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAAAD8AAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-06-03T08:47:36.14Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AddOrderModal.jsx",
+              "DocumentMoniker": "C:\\Users\\San\\source\\repos\\Local2\\Inventory-Management\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Inbound\\AddOrderModal.jsx",
+              "RelativeDocumentMoniker": "inventory-software\\app\\(back-office)\\Overview\\Trading\\Inbound\\AddOrderModal.jsx",
+              "ToolTip": "C:\\Users\\San\\source\\repos\\Local2\\Inventory-Management\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Inbound\\AddOrderModal.jsx",
+              "RelativeToolTip": "inventory-software\\app\\(back-office)\\Overview\\Trading\\Inbound\\AddOrderModal.jsx",
+              "ViewState": "AgIAAEgBAAAAAAAAAADwv2gBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-06-03T08:15:03.521Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ProductDetailsCard.jsx",
-              "DocumentMoniker": "C:\\Users\\San\\source\\repos\\Local2\\Inventory-Management\\inventory-software\\app\\(back-office)\\Overview\\Dashboard\\ProductDetailsCard.jsx",
-              "RelativeDocumentMoniker": "inventory-software\\app\\(back-office)\\Overview\\Dashboard\\ProductDetailsCard.jsx",
-              "ToolTip": "C:\\Users\\San\\source\\repos\\Local2\\Inventory-Management\\inventory-software\\app\\(back-office)\\Overview\\Dashboard\\ProductDetailsCard.jsx",
-              "RelativeToolTip": "inventory-software\\app\\(back-office)\\Overview\\Dashboard\\ProductDetailsCard.jsx",
-              "ViewState": "AgIAABoAAAAAAAAAAAAAwEQAAAAOAAAAAAAAAA==",
+              "Title": "AddOrderModal.jsx",
+              "DocumentMoniker": "C:\\Users\\San\\source\\repos\\Local2\\Inventory-Management\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Outbound\\AddOrderModal.jsx",
+              "RelativeDocumentMoniker": "inventory-software\\app\\(back-office)\\Overview\\Trading\\Outbound\\AddOrderModal.jsx",
+              "ToolTip": "C:\\Users\\San\\source\\repos\\Local2\\Inventory-Management\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Outbound\\AddOrderModal.jsx",
+              "RelativeToolTip": "inventory-software\\app\\(back-office)\\Overview\\Trading\\Outbound\\AddOrderModal.jsx",
+              "ViewState": "AgIAALgBAAAAAAAAAAAwwM8BAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
-              "WhenOpened": "2025-06-03T03:24:21.001Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "InventorySummaryCard.jsx",
-              "DocumentMoniker": "C:\\Users\\San\\source\\repos\\Local2\\Inventory-Management\\inventory-software\\app\\(back-office)\\Overview\\Dashboard\\InventorySummaryCard.jsx",
-              "RelativeDocumentMoniker": "inventory-software\\app\\(back-office)\\Overview\\Dashboard\\InventorySummaryCard.jsx",
-              "ToolTip": "C:\\Users\\San\\source\\repos\\Local2\\Inventory-Management\\inventory-software\\app\\(back-office)\\Overview\\Dashboard\\InventorySummaryCard.jsx",
-              "RelativeToolTip": "inventory-software\\app\\(back-office)\\Overview\\Dashboard\\InventorySummaryCard.jsx",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
-              "WhenOpened": "2025-06-03T03:24:09.147Z",
+              "WhenOpened": "2025-06-03T08:12:40.905Z",
               "EditorCaption": ""
             }
           ]

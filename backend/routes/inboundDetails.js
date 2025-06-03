@@ -13,7 +13,7 @@ router.get('/:inboundOrderID', async (req, res) => {
         const result = await pool.request()
             .input('InboundOrderID', sql.VarChar, inboundOrderID)
             .query(`
-                SELECT InboundDetailID, InboundOrderID, ProductID, WarehouseID, QuantityReceived, UnitPrice, LineTotal
+                SELECT InboundOrderID, ProductID, WarehouseID, QuantityReceived, UnitPrice, LineTotal
                 FROM InboundOrderDetails
                 WHERE InboundOrderID = @InboundOrderID
             `);

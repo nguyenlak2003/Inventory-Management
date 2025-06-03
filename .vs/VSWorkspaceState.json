@@ -2,15 +2,15 @@
   "ExpandedNodes": [
     "",
     "\\backend",
+    "\\backend\\routes",
     "\\inventory-software",
     "\\inventory-software\\app",
     "\\inventory-software\\app\\(back-office)",
     "\\inventory-software\\app\\(back-office)\\Overview",
-    "\\inventory-software\\app\\(back-office)\\Overview\\Dashboard",
-    "\\inventory-software\\app\\(back-office)\\Overview\\Security",
-    "\\inventory-software\\app\\login",
-    "\\inventory-software\\components"
+    "\\inventory-software\\app\\(back-office)\\Overview\\Trading",
+    "\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Inbound",
+    "\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Outbound"
   ],
-  "SelectedNode": "\\inventory-software\\components",
+  "SelectedNode": "\\inventory-software",
   "PreviewInSolutionExplorer": false
 }

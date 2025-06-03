@@ -245,6 +245,9 @@ function EmployeeManagement() {
       Role: itemDataFromForm.role,
     };
 
+    const dob = itemDataFromForm.dob;
+   
+
     const method = isAddingNew ? "POST" : "PUT";
     const endpoint = isAddingNew 
       ? `${apiUrl}/api/employees` 
