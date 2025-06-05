@@ -13,7 +13,7 @@ router.get('/:outboundOrderID', async (req, res) => {
         const result = await pool.request()
             .input('OutboundOrderID', sql.VarChar, outboundOrderID)
             .query(`
-                SELECT OutboundDetailID, OutboundOrderID, ProductID, WarehouseID, UnitPrice, QuantityDispatched, LineTotal
+                SELECT OutboundOrderID, ProductID, WarehouseID, UnitPrice, QuantityDispatched, LineTotal
                 FROM OutboundOrderDetails
                 WHERE OutboundOrderID = @OutboundOrderID
             `);
@@ -45,7 +45,7 @@ router.post('/', async (req, res) => {
                 .input('QuantityDispatched', sql.Int, item.QuantityDispatched)
                 .input('LineTotal', sql.Decimal(18, 2), item.LineTotal)
                 .query(`
-                    INSERT INTO OutboundOrderDetails (OutboundOrderID, ProductID, WarehouseID, UnitPrice, QuantityDispatched, LineTotal)
+                    INSERT INTO  (OutboundOrderID, ProductID, WarehouseID, UnitPrice, QuantityDispatched, LineTotal)
                     VALUES (@OutboundOrderID, @ProductID, @WarehouseID, @UnitPrice, @QuantityDispatched, @LineTotal)
                 `);
             request.parameters = {}; // Reset parameters for next iteration

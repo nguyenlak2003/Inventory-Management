@@ -11,6 +11,6 @@
     "\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Inbound",
     "\\inventory-software\\app\\(back-office)\\Overview\\Trading\\Outbound"
   ],
-  "SelectedNode": "\\inventory-software",
+  "SelectedNode": "\\backend\\table.sql",
   "PreviewInSolutionExplorer": false
 }

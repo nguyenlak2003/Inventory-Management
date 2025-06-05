@@ -17,7 +17,6 @@ function AddOrderModal({ onClose, onAddOrder }) {
     const [selectedCustomerID, setSelectedCustomerID] = useState("");
     const [products, setProducts] = useState([]);
     const [warehouses, setWarehouses] = useState([]);
-    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -76,7 +75,6 @@ function AddOrderModal({ onClose, onAddOrder }) {
         if (id === "numberOfItems" && Number(value) < step - 1) {
             setStep(1);
         }
-        setErrors({});
     };
 
     const handleCustomerChange = (e) => {
@@ -85,7 +83,6 @@ function AddOrderModal({ onClose, onAddOrder }) {
             ...prev,
             customerName: e.target.value
         }));
-        setErrors({});
     };
 
     const handleItemChange = (idx, field, value) => {
@@ -94,70 +91,9 @@ function AddOrderModal({ onClose, onAddOrder }) {
             updated[idx][field] = value;
             return updated;
         });
-        setErrors({});
-    };
-
-    // Validation helpers
-    const isValidDate = (dateStr) => {
-        if (!dateStr) return false;
-        const d = new Date(dateStr);
-        return !isNaN(d.getTime());
-    };
-
-    const isValidProduct = (productID) => {
-        return products.some(p => p.ProductID === productID);
-    };
-
-    const isValidWarehouse = (warehouseID) => {
-        return warehouses.some(w => w.WarehouseID === warehouseID);
-    };
-
-    const validateForm = () => {
-        const newErrors = {};
-        if (!isValidDate(newOrder.date)) {
-            newErrors.date = "Please enter a valid date.";
-        }
-        if (!newOrder.numberOfItems || Number(newOrder.numberOfItems) <= 0) {
-            newErrors.numberOfItems = "Number of items must be greater than 0.";
-        }
-        orderItems.forEach((item, idx) => {
-            if (!isValidProduct(item.productID)) {
-                newErrors[`productID_${idx}`] = "Invalid Product ID.";
-            }
-            if (!isValidWarehouse(item.warehouseID)) {
-                newErrors[`warehouseID_${idx}`] = "Invalid Warehouse ID.";
-            }
-            if (!item.quantityDispatched || Number(item.quantityDispatched) <= 0) {
-                newErrors[`quantityDispatched_${idx}`] = "Quantity must be greater than 0.";
-            }
-        });
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-    const validateFirstPage = () => {
-        const newErrors = {};
-        if (!newOrder.orderID || newOrder.orderID.trim() === "") {
-            newErrors.orderID = "Order ID is required.";
-        }
-        if (!newOrder.customerName || newOrder.customerName.trim() === "") {
-            newErrors.customerName = "Customer is required.";
-        }
-        if (!isValidDate(newOrder.date)) {
-            newErrors.date = "Please enter a valid date.";
-        }
-        if (!newOrder.numberOfItems || Number(newOrder.numberOfItems) <= 0) {
-            newErrors.numberOfItems = "Number of items must be greater than 0.";
-        }
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
     };
 
     const handleSubmit = async () => {
-        if (!validateForm()) {
-            return;
-        }
-
         let dateValue = newOrder.date;
         if (dateValue) {
             dateValue = new Date(dateValue).toISOString();
@@ -249,9 +185,7 @@ function AddOrderModal({ onClose, onAddOrder }) {
 
     if (step === 1) {
         const handleNext = () => {
-            if (validateFirstPage()) {
-                setStep(2);
-            }
+            setStep(2);
         };
 
         return (
@@ -279,7 +213,6 @@ function AddOrderModal({ onClose, onAddOrder }) {
                                 placeholder="Enter Order ID"
                                 autoComplete="off"
                             />
-                            {errors.orderID && <span className="text-red-600 text-sm">{errors.orderID}</span>}
                         </div>
                         <div className="flex flex-col gap-1">
                             <label htmlFor="customerName">Customer</label>
@@ -297,7 +230,6 @@ function AddOrderModal({ onClose, onAddOrder }) {
                                     </option>
                                 ))}
                             </select>
-                            {errors.customerName && <span className="text-red-600 text-sm">{errors.customerName}</span>}
                         </div>
                         <div className="flex flex-col gap-1">
                             <label htmlFor="date">Date</label>
@@ -308,7 +240,6 @@ function AddOrderModal({ onClose, onAddOrder }) {
                                 value={newOrder.date}
                                 onChange={handleInputChange}
                             />
-                            {errors.date && <span className="text-red-600 text-sm">{errors.date}</span>}
                         </div>
                         <div className="flex flex-col gap-1">
                             <label htmlFor="notes">Notes</label>
@@ -329,7 +260,6 @@ function AddOrderModal({ onClose, onAddOrder }) {
                                 value={newOrder.numberOfItems}
                                 onChange={handleInputChange}
                             />
-                            {errors.numberOfItems && <span className="text-red-600 text-sm">{errors.numberOfItems}</span>}
                         </div>
                         <div className="flex gap-2 justify-end mt-4">
                             <button
@@ -400,9 +330,6 @@ function AddOrderModal({ onClose, onAddOrder }) {
                                                     handleItemChange(globalIdx, "productID", e.target.value)
                                                 }
                                             />
-                                            {errors[`productID_${globalIdx}`] && (
-                                                <span className="text-red-600 text-xs">{errors[`productID_${globalIdx}`]}</span>
-                                            )}
                                         </td>
                                         <td className="p-2 border">
                                             <input
@@ -412,9 +339,6 @@ function AddOrderModal({ onClose, onAddOrder }) {
                                                     handleItemChange(globalIdx, "warehouseID", e.target.value)
                                                 }
                                             />
-                                            {errors[`warehouseID_${globalIdx}`] && (
-                                                <span className="text-red-600 text-xs">{errors[`warehouseID_${globalIdx}`]}</span>
-                                            )}
                                         </td>
                                         <td className="p-2 border">
                                             <input
@@ -426,9 +350,6 @@ function AddOrderModal({ onClose, onAddOrder }) {
                                                     handleItemChange(globalIdx, "quantityDispatched", e.target.value)
                                                 }
                                             />
-                                            {errors[`quantityDispatched_${globalIdx}`] && (
-                                                <span className="text-red-600 text-xs">{errors[`quantityDispatched_${globalIdx}`]}</span>
-                                            )}
                                         </td>
                                         <td className="p-2 border">
                                             <input

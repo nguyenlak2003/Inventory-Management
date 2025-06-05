@@ -52,6 +52,7 @@ router.post('/', async (req, res) => {
         }
 
         await transaction.commit();
+        console.log("Inbound order details added successfully.");
         res.status(201).json({ message: 'Inbound order details added.' });
     } catch (err) {
         console.error("Error adding inbound order details:", err);
