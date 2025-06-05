@@ -17,7 +17,7 @@ router.post('/login', async (req, res) => {
     console.time('Query time');
     const result = await pool.request()
       .input('username', sql.VarChar, username)
-      .query('SELECT username, password FROM Employee WHERE username = @username');
+      .query('SELECT username, password, Role FROM Employee WHERE username = @username');
     console.timeEnd('Query time');
 
     const user = result.recordset[0];
@@ -35,9 +35,9 @@ router.post('/login', async (req, res) => {
     }
 
     const token = jwt.sign(
-      {username: user.username},
+      {username: user.username, role: user.Role},
       JWT_SECRET,
-      {expiresIn: '1h'}
+      {expiresIn: '5h'}
     );
     
     res.json({ message: 'Đăng nhập thành công', token, user: { username: user.username } });
@@ -85,5 +85,45 @@ router.get('/me', authenticateToken, async (req, res) => {
     res.status(500).json({ message: 'Lỗi server' });
   }
 });
+
+// Route đổi mật khẩu
+router.put('/change-password', authenticateToken, async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  const { username } = req.user;
+
+  if (!currentPassword || !newPassword) {
+    return res.status(400).json({ message: 'Current password and new password are required.' });
+  }
+
+  try {
+    const pool = await poolPromise;
+    const userResult = await pool.request()
+                            .input('username', sql.VarChar, username)
+                            .query('SELECT password FROM Employee WHERE username = @username');
+    
+    const user = userResult.recordset[0];
+
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Incorrect current password.' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+
+    await pool.request()
+      .input('username', sql.VarChar, username)
+      .input('newPassword', sql.VarChar, hashedNewPassword)
+      .query('UPDATE Employee SET password = @newPassword WHERE username = @username');
+
+    console.log(`Password for user ${username} updated successfully.`);
+    res.json({ message: 'Password updated successfully.' });
+    
+  } catch (error) {
+    console.error('Error changing password:', err);
+    res.status(500).json({ message: 'Server error during password change.' });
+  }
+})
 
 module.exports = router;

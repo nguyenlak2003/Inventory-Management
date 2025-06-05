@@ -9,6 +9,8 @@ function PasswordChangeCard() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -45,13 +47,43 @@ function PasswordChangeCard() {
     return true;
   };
 
-  const handlePasswordChange = () => {
-    if (validatePassword()) {
-      // Simulate API call
-      console.log("Password updated");
+  const handlePasswordChange = async () => {
+    if (!validatePassword()) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`${apiUrl}/api/auth/change-password`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          currentPassword,
+          newPassword,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Use the error message from the backend
+        setPasswordError(data.message || 'Failed to update password.');
+        return;
+      }
+
+      alert('Password updated successfully!');
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
+      setPasswordError("");
+      
+    } catch (error) {
+      console.error('Password update error:', error);
+      setPasswordError('An unexpected error occurred. Please try again.');
     }
   };
 
